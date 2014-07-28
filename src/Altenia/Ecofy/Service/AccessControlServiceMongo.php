@@ -61,7 +61,6 @@ class AccessControlServiceMongo extends BaseServiceMongo {
      */
     public function __construct($id = 'access_control')
     {
-
     	parent::__construct($id, 'access_control');
     }
 

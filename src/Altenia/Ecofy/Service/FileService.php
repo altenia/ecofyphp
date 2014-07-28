@@ -2,7 +2,7 @@
 
 
 /**
- * Service class that provides business logic for category
+ * Service class that provides file 
  */
 class FileService extends BaseService {
 

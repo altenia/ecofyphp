@@ -71,7 +71,6 @@ class MenuService extends BaseService {
                 $menus['workspace'][] = self::createMenuItem(\Lang::get('site.documents'), $menu_documents, 'glyphicon-folder-open');
             }
             
-
             $menu_favorites = array(
                 array('FAL', \URL::to('/page/fal')),
                 );

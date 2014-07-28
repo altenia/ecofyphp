@@ -1,6 +1,7 @@
 <?php namespace Altenia\Ecofy\Controller;
 
-use \Altenia\Ecofy\QueryContext;
+use Altenia\Ecofy\QueryContext;
+use Altenia\EcofyService\ValidationException;
 
 /**
  * Controller class that provides web access to resource
@@ -88,7 +89,7 @@ class GenericServiceController extends \BaseController {
             	array('save' => route($this->moduleNamePlural . '.edit', array($record->sid))),
             	route($this->moduleNamePlural . '.index')
             	);
-        } catch (Service\ValidationException $ve) {
+        } catch (ValidationException $ve) {
             return Redirect::to( route($this->moduleNamePlural . '.create'))
                 ->withErrors($ve->getObject());
         }
@@ -153,14 +154,10 @@ class GenericServiceController extends \BaseController {
             	array('save' => route($this->moduleNamePlural . '.edit', array($record->sid))),
             	route($this->moduleNamePlural . '.index')
             	);
-        } catch (Service\ValidationException $ve) {
+        } catch (ValidationException $ve) {
             return Redirect::to(route($this->moduleNamePlural . '.edit', array($id)))
                 ->withErrors($ve->getObject());
-        } /* catch (Exception $e) {
-            return Redirect::to('users/' . $id . '/edit')
-                ->withErrors($e->getMessage());
-                //->withInput(Input::except('password'));
-        }*/
+        } 
 	}
 
 	/**

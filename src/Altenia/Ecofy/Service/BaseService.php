@@ -111,7 +111,7 @@ class BaseService {
 	 */
 	protected function generateUuid()
 	{
-		return BaseService::uuidV4();
+		return self::uuidV4();
 	}
 
 	public static function uuidV4() {

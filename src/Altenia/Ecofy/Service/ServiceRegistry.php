@@ -10,6 +10,12 @@ class ServiceRegistry {
 
     private $servicesById = array();
 
+    private static $instance = new ServiceRegistry();
+
+    public static function instance(){
+        return self::$instance;
+    }
+
     /**
      * Returns list of the records.
      *

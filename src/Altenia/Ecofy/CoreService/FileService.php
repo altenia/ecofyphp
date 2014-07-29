@@ -1,5 +1,4 @@
-<?php namespace Altenia\Ecofy\Service;
-
+<?php namespace Altenia\Ecofy\CoreService;
 
 /**
  * Service class that provides file 

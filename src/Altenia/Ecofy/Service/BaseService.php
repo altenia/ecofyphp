@@ -8,6 +8,8 @@ class BaseService {
 	/** Service id **/
 	private $id;
 
+	private $dao;
+
 	/**
 	 * The service that contains this service.
 	 * E.g. In blog-comment relation, the Blog service will be container, and comment will be contained
@@ -23,8 +25,9 @@ class BaseService {
 	/** Reference to the access control service **/
 	private $acessControlService = null;
 
-	public function __construct($id)
+	public function __construct($dao, $id)
     {
+    	$this->dao = $dao; 
         $this->id = $id;
     }
 
@@ -141,7 +144,7 @@ class BaseService {
 	{
 		if ($this->acessControlService == null) {
 			// @todo - externalize the access_control service name
-			$this->acessControlService = \App::make('svc:access_control');
+			$this->acessControlService = ServiceRegistry::instance()->findServiceById('access_control');
 		}
 		return $this->acessControlService;
 		

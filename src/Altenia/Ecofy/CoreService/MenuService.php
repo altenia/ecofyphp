@@ -1,4 +1,4 @@
-<?php namespace Altenia\Ecofy\Service;
+<?php namespace Altenia\Ecofy\CoreService;
 
 
 /**

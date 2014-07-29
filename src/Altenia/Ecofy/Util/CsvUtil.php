@@ -1,4 +1,4 @@
-<?php namespace DocuFlow\Helper;
+<?php namespace Altenia\Ecofy\Util;
 
 /**
  * Represents a set of records with header.

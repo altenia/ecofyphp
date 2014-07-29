@@ -8,10 +8,9 @@ class AuthzFacade {
 
 	private static $accessControlService = null;
 		
-
 	public static function getAccessControlService() {
 		if (self::$accessControlService == null) {
-			self::$accessControlService = \App::make('svc:access_control');
+			self::$accessControlService = ServiceRegistry::instance()->findServiceById('access_control');
 		}
 		return self::$accessControlService;
 	}
@@ -77,7 +76,7 @@ class AuthzFacade {
 		$resource = '';
 		// Remove 'Controller' suffix
 		$serviceName = substr($controllerName, 0,  - 10); 
-		if (\DocuFlow\Helper\StringUtil::endsWith($serviceName, 'Api')) {
+		if (StringUtil::endsWith($serviceName, 'Api')) {
 			// Remove 'Api'
 			$serviceName = substr($serviceName, 0,  - 3); 
 		}

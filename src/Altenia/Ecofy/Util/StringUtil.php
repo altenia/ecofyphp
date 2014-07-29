@@ -1,4 +1,4 @@
-<?php namespace DocuFlow\Helper;
+<?php namespace Altenia\Ecofy\Util;
 
 /**
  * Helper class that provides HTML rendering functionalites.

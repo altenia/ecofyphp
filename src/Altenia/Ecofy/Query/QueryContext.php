@@ -84,7 +84,7 @@ class QueryContext {
 	 */
 	public function buildCriteria()
 	{
-		$criteriaBuilder = new \DocuFlow\Helper\DfCriteriaBuilder();
+		$criteriaBuilder = new CriteriaBuilder();
         $criteria = $criteriaBuilder->buildFromQueryParams($this->qparams);
         return $criteria;
 	}

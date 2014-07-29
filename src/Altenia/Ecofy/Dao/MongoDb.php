@@ -8,13 +8,20 @@ class MongoDb {
 	private $db_connection;
     private $db_db;
 
+    public static $db_name;
+
+    public static function setDbName($dbName)
+    {
+        self::$db_name = $dbName;
+    }
+
     /**
      * Constructor
      */
     public function __construct($dbName = null)
     {
     	if (empty($dbName)) {
-    		$dbName = 'docuflow';
+    		$dbName = self::$db_db;
     	}
         $this->db_connection = new \MongoClient();
         $this->db_db = $this->db_connection->selectDB($dbName);

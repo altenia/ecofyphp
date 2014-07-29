@@ -3,6 +3,11 @@
 use Altenia\Ecofy\QueryContext;
 use Altenia\EcofyService\ValidationException;
 
+use Illuminate\Routing\Redirector;
+use Illuminate\Translation\Translator; // Lang()
+use Illuminate\Session\SessionManager; // Session()
+use Illuminate\View\Factory; // View()
+
 /**
  * Controller class that provides web access to resource
  *
@@ -32,11 +37,11 @@ class GenericServiceController extends \BaseController {
 		$this->moduleName = snake_case($modelName);
 		$this->moduleNamePlural = snake_case($this->modelNamePlural);
 
-        $this->service = App::make($serviceInstanceName);
+        $this->service = \App::make($serviceInstanceName);
 
 		$this->layout = $layoutName;
-		$this->addBreadcrumb([Lang::get($this->moduleName . '._name_plural'), route($this->moduleNamePlural . '.index')]);
-		$this->setContentTitle(Lang::get($this->moduleName . '._name_plural'));
+		$this->addBreadcrumb([\Lang::get($this->moduleName . '._name_plural'), route($this->moduleNamePlural . '.index')]);
+		$this->setContentTitle(\Lang::get($this->moduleName . '._name_plural'));
     }
 
 	/**
@@ -51,7 +56,7 @@ class GenericServiceController extends \BaseController {
 
 		$listMethod = 'list' . $this->modelNamePlural;
 		$records = $this->service->$listMethod($criteria, array(), $queryCtx->getOffset(), $queryCtx->limit);
-		$this->layout->content = View::make($this->moduleName . '.index')
+		$this->layout->content = \View::make($this->moduleName . '.index')
 			->with('queryCtx', $queryCtx)
 			->with('auxdata', $this->indexAuxData())
 		    ->with('records', $records);
@@ -65,9 +70,9 @@ class GenericServiceController extends \BaseController {
 	public function create()
 	{
 		$this->addBreadcrumb(['new']);
-		$this->setContentTitle('New ' . Lang::get($this->moduleName . '._name') );
+		$this->setContentTitle('New ' . \Lang::get($this->moduleName . '._name') );
 
-		$this->layout->content = View::make($this->moduleName . '.create')
+		$this->layout->content = \View::make($this->moduleName . '.create')
 			->with('auxdata', $this->createAuxData());
 	}
 
@@ -78,19 +83,19 @@ class GenericServiceController extends \BaseController {
 	 */
 	public function store()
 	{
-		$data = Input::all();
+		$data = \Input::all();
 
 		try {
 			$createMethod = 'create' . $this->modelName;
             $record = $this->service->$createMethod($data);
-            Session::flash('message', 'Successfully created!');
+            \Session::flash('message', 'Successfully created!');
             
             return $this->redirectAfterPost(
             	array('save' => route($this->moduleNamePlural . '.edit', array($record->sid))),
             	route($this->moduleNamePlural . '.index')
             	);
         } catch (ValidationException $ve) {
-            return Redirect::to( route($this->moduleNamePlural . '.create'))
+            return \Redirect::to( route($this->moduleNamePlural . '.create'))
                 ->withErrors($ve->getObject());
         }
 	}
@@ -106,10 +111,10 @@ class GenericServiceController extends \BaseController {
 		$findMethod = 'find' . $this->modelName . 'ByPK';
 		$record = $this->service->$findMethod($id);
 
-		$this->addBreadcrumb([$record->getName(), Request::url()]);
-		$this->setContentTitle(Lang::get($this->moduleName . '._name') . ' - ' .  $record->getName());
+		$this->addBreadcrumb([$record->getName(), \Request::url()]);
+		$this->setContentTitle(\Lang::get($this->moduleName . '._name') . ' - ' .  $record->getName());
 
-		$this->layout->content = View::make($this->moduleName . '.show')
+		$this->layout->content = \View::make($this->moduleName . '.show')
 			->with('auxdata', $this->showAuxData($record))
 			->with('record', $record);
 	}
@@ -125,11 +130,11 @@ class GenericServiceController extends \BaseController {
 		$findMethod = 'find' . $this->modelName . 'ByPK';
 	    $record = $this->service->$findMethod($id);
 
-	    $showUrl = URL::to(route($this->moduleNamePlural . '.show', array($record->sid)));
+	    $showUrl = \URL::to(route($this->moduleNamePlural . '.show', array($record->sid)));
 		$this->addBreadcrumb([$record->getName(), $showUrl]);
-		$this->setContentTitle(Lang::get($this->moduleName . '._name') . ' - ' .  $record->getName());
+		$this->setContentTitle(\Lang::get($this->moduleName . '._name') . ' - ' .  $record->getName());
 
-		$this->layout->content = View::make($this->moduleName . '.edit')
+		$this->layout->content = \View::make($this->moduleName . '.edit')
 			->with('auxdata', $this->editAuxData($record))
 		    ->with('record', $record);
 	}
@@ -148,14 +153,14 @@ class GenericServiceController extends \BaseController {
 		try {
 			$updateMethod = 'update' . $this->modelName;
             $record = $this->service->$updateMethod($id, $data);
-            Session::flash('message', 'Successfully updated!');
+            \Session::flash('message', 'Successfully updated!');
 
             return $this->redirectAfterPost(
             	array('save' => route($this->moduleNamePlural . '.edit', array($record->sid))),
             	route($this->moduleNamePlural . '.index')
             	);
         } catch (ValidationException $ve) {
-            return Redirect::to(route($this->moduleNamePlural . '.edit', array($id)))
+            return \Redirect::to(route($this->moduleNamePlural . '.edit', array($id)))
                 ->withErrors($ve->getObject());
         } 
 	}
@@ -172,11 +177,11 @@ class GenericServiceController extends \BaseController {
 		$success = $this->service->$deleteMethod($id);
 
 		if ($success) {
-            Session::flash('message', 'Successfully deleted!');
-            return Redirect::to($this->moduleNamePlural);
+            \Session::flash('message', 'Successfully deleted!');
+            return \Redirect::to($this->moduleNamePlural);
         } else {
-            Session::flash('message', 'Entry not found');
-            return Redirect::to($this->moduleNamePlural);
+            \Session::flash('message', 'Entry not found');
+            return \Redirect::to($this->moduleNamePlural);
         }
 	}
 

@@ -35,15 +35,17 @@ Example:
 
 	}
 
-Once you have the library project with the composer.json file correctly configured, you can add a require
+Once you have the library project with the composer.json file correctly configured pushed to GitHub, you can the easily include the library by requiring it in the project's composer.json.
 
-composer.json file of the project that uses the library:
+The followig is the composer.json file of the project that uses the library:
 "repositories": [
     {
         "type": "vcs",
         "url": "https://github.com/altenia/ecofy"
     }
 ],
+
+Then run `composer update`
 
 ## 2. Step three (optional): Register with Packagist. ##
 Register the library so it is known to the community.

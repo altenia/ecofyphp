@@ -76,7 +76,6 @@ class AccessControlService extends BaseService {
 	public function listAccessControls($criteria, $sortParams = array(), $offset = 0, $limit=100)
 	{
         $result = $this->dao->query($criteria, $sortParams, $offset, $limit);
-        
         return $result;
 	}
 
@@ -146,7 +145,7 @@ class AccessControlService extends BaseService {
 	 */
 	public function findAccessControlByPK($pk)
 	{
-        return $this->dao->find($pk);
+        return $this->dao->findByPK($pk);
 	}
 
 	/**

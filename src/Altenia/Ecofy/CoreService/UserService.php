@@ -1,11 +1,6 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
-/**
- * namespace is same as the foldername
- * There should be an entry in composer.json
- * in the array property autoload.classmap
- * additional element: "app/services"
- */
+use Altenia\Ecofy\Service\BaseService;
 
 /**
  * Service class that provides business logic for User
@@ -80,7 +75,7 @@ class UserService extends BaseService  {
         //$validator = \User::validator($data);
         //if ($validator->passes()) {
         if (true) {
-            $record = new \User();
+            $record = new User();
             $record->fill($data);
             $this->setRoleName($record);
 
@@ -101,7 +96,7 @@ class UserService extends BaseService  {
             $arrModel['_id'] = new \MongoId();
             $record->sid = (string)$arrModel['_id'];
 
-            $record = $dao->insert($record);
+            $record = $this->dao->insert($record);
 
             // Send verification email
 

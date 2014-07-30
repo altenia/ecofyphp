@@ -21,7 +21,7 @@ class MongoDb {
     public function __construct($dbName = null)
     {
     	if (empty($dbName)) {
-    		$dbName = self::$db_db;
+    		$dbName = self::$db_name;
     	}
         $this->db_connection = new \MongoClient();
         $this->db_db = $this->db_connection->selectDB($dbName);

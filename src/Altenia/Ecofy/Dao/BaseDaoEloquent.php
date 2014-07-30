@@ -1,6 +1,6 @@
 <?php namespace Altenia\Ecofy\Dao;
 
-use Altenia\Ecofy\Query\QueryBuilderEloquent;
+use Altenia\Ecofy\Support\QueryBuilderEloquent;
 
 /**
  * Helper class that provides HTML rendering functionalites.

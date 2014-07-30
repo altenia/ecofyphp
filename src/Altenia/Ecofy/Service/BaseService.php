@@ -8,7 +8,8 @@ class BaseService {
 	/** Service id **/
 	private $id;
 
-	private $dao;
+	/** Main DataAccessObject **/
+	protected $dao;
 
 	/**
 	 * The service that contains this service.

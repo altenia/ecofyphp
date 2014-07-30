@@ -1,10 +1,16 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
+use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
+use Illuminate\Auth\Reminders\RemindableTrait;
+
 use Illuminate\Database\Eloquent\Model;
 
+
 class User extends Model implements UserInterface, RemindableInterface {
+
+    use UserTrait, RemindableTrait;
 
     /**
      * The database table used by the model.

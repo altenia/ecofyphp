@@ -1,6 +1,6 @@
 <?php namespace Altenia\Ecofy\Controller;
 
-use Altenia\Ecofy\Query\QueryContext;
+use Altenia\Ecofy\Support\QueryContext;
 //use Illuminate\Support\Facades\Response;
 //use Illuminate\Support\Facades\Input;
 
@@ -23,7 +23,7 @@ class GenericServiceApiController extends \BaseController {
 	public function __construct($serviceInstanceName, $modelName, $modelNamePlural = null) {
 		$this->modelName = ucfirst($modelName);
 		$this->modelNamePlural = ($modelNamePlural != null) ? ucfirst($modelNamePlural) : $this->modelName . 's';
-        $this->service = App::make($serviceInstanceName);
+        $this->service = \App::make($serviceInstanceName);
     }
 
 	/**
@@ -59,7 +59,7 @@ class GenericServiceApiController extends \BaseController {
 	 */
 	public function create()
 	{
-		App::abort(404);
+		\App::abort(404);
 	}
 
 	/**
@@ -69,13 +69,13 @@ class GenericServiceApiController extends \BaseController {
 	 */
 	public function store()
 	{
-		$data = Input::all();
+		$data = \Input::all();
 
 		$createMethod = 'create' . $this->modelName;
 
         try {
             $record = $this->service->$createMethod($data);
-            return Response::json(array(
+            return \Response::json(array(
                 'sid' => $record->sid),
                 201
             );
@@ -110,7 +110,7 @@ class GenericServiceApiController extends \BaseController {
 	 */
 	public function edit($id)
 	{
-	    App::abort(404);
+	    \App::abort(404);
 	}
 
 	/**
@@ -121,17 +121,17 @@ class GenericServiceApiController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		$data = Input::all();
+		$data = \Input::all();
 
         try {
         	$updateMethod = 'update' . $this->modelName;
             $record = $this->service->$updateMethod($id, $data);
-            return Response::json(array(
+            return \Response::json(array(
                 'sid' => $record->sid),
                 200
             );
         } catch (Exception $e) {
-            return Response::json(array(
+            return \Response::json(array(
                 'error' => $e->getMessage()),
                 400
             );
@@ -156,12 +156,12 @@ class GenericServiceApiController extends \BaseController {
 		}
 
 		if (!empty($result)) {
-		    return Response::json(array(
+		    return \Response::json(array(
                 'removed' => $id),
                 204
             );
 		} else {
-		    App::abort(404);
+		    \App::abort(404);
 		}
 	}
 }

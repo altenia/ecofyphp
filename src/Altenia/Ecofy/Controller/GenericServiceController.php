@@ -1,6 +1,6 @@
 <?php namespace Altenia\Ecofy\Controller;
 
-use Altenia\Ecofy\QueryContext;
+use Altenia\Ecofy\Support\QueryContext;
 use Altenia\EcofyService\ValidationException;
 
 use Illuminate\Routing\Redirector;

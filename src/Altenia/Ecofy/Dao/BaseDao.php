@@ -5,11 +5,11 @@
  */
 abstract class BaseDao {
 
-	protected $modelName;
+	protected $modelFqn;
 
-	public function __construct($modelName)
+	public function __construct($modelFqn)
     {
-    	$this->modelName = $modelName;
+    	$this->modelFqn = $modelFqn;
     }
 
     /**
@@ -17,7 +17,7 @@ abstract class BaseDao {
      */
     public function modelClassName()
     {
-        return '\'' . $this->modelName;
+        return '\'' . $this->modelFqn;
     }
 
     public function newModel()

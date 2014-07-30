@@ -1,4 +1,4 @@
-<?php namespace Altenia\Ecofy\Query;
+<?php namespace Altenia\Ecofy\Support;
 
 /**
  * Helper class that builds query criteria.

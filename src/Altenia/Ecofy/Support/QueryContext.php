@@ -1,4 +1,4 @@
-<?php namespace Altenia\Ecofy\Query;
+<?php namespace Altenia\Ecofy\Support;
 
 /**
  * Class that represents contextual information about query.

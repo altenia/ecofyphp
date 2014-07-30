@@ -1,6 +1,6 @@
 <?php namespace Altenia\Ecofy\Dao;
 
-use Altenia\Ecofy\Query\QueryBuilderMongo;
+use Altenia\Ecofy\Support\QueryBuilderMongo;
 use Illuminate\Support\Str;
 
 /**
@@ -164,7 +164,7 @@ class BaseDaoMongo extends BaseDao {
     /**
      * Returns the Laravel model object
      */
-    private function toModel($doc)
+    protected function toModel($doc)
     {
         $model = $this->newModel();
         $model->sid = (string)$doc['_id'];
@@ -172,12 +172,7 @@ class BaseDaoMongo extends BaseDao {
         return $model;
     }
 
-    private function modelClassName()
-    {
-        return '\'' . $this->modelName;
-    }
-
-    private function getDateTime($date)
+    protected function getDateTime($date)
     {
         return \MongoDate($date);
     }

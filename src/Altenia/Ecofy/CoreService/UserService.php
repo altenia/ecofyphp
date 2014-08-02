@@ -1,6 +1,7 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
 use Altenia\Ecofy\Service\BaseService;
+use Altenia\Ecofy\Service\ValidationException;
 
 /**
  * Service class that provides business logic for User
@@ -72,9 +73,9 @@ class UserService extends BaseService  {
 
         $data['type'] = '';
 
-        //$validator = \User::validator($data);
-        //if ($validator->passes()) {
-        if (true) {
+        $validator = User::validator($data);
+        if ($validator->passes()) {
+        //if (true) {
             $record = new User();
             $record->fill($data);
             $this->populateRoleName($record);

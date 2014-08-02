@@ -1,7 +1,7 @@
 <?php namespace Altenia\Ecofy\Controller;
 
 use Altenia\Ecofy\Support\QueryContext;
-use Altenia\EcofyService\ValidationException;
+use Altenia\Ecofy\Service\ValidationException;
 
 use Illuminate\Routing\Redirector;
 use Illuminate\Translation\Translator; // Lang()

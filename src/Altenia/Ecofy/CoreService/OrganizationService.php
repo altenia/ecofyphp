@@ -1,6 +1,7 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
 use Altenia\Ecofy\Service\BaseService;
+use Altenia\Ecofy\Service\ValidationException;
 
 /**
  * Service class that provides business logic for organization
@@ -68,19 +69,6 @@ class OrganizationService extends BaseService {
         if ($validator->passes()) {
             $record = new \Organization();
             $record->fill($data);
-
-            /*
-             * @todo: assign default values as needed
-             */
-            $now = new \DateTime;
-            $now_str = $now->format('Y-m-d H:i:s');
-            $record->uuid = uniqid();
-            $record->created_dt = $now_str;
-            $record->updated_dt = $now_str;
-
-            $arrModel = $record->toArray();
-            $arrModel['_id'] = new \MongoId();
-            $record->sid = (string)$arrModel['_id'];
 
             return $dao->insert($record);
         } else {

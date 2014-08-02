@@ -1,6 +1,7 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
 use Altenia\Ecofy\Service\BaseService;
+use Altenia\Ecofy\Service\ValidationException;
 
 /**
  * Service class that provides business logic for role

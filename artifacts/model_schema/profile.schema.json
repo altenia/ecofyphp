@@ -1,0 +1,72 @@
+{
+    "schema-name": "ecofy",
+    "version": 0.1,
+    "date": "2014-07-32",
+    "description": "Database schema for Ecofy system",
+
+    "entities": {
+        "profile": {
+            "plural": "profiles",
+            "fields":[
+                {"name":"sid", "type":"auto", "is_nullable": false},
+                {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
+                {"name":"domain_sid", "type":"long", "is_nullable": true},
+                {"name":"domain_id", "type":"string", "length":64},
+                {"name":"created_by", "type":"long"},
+                {"name":"created_dt", "type":"datetime"},
+                {"name":"updated_by", "type":"long"},
+                {"name":"updated_dt", "type":"datetime"},
+                {"name":"update_counter", "type":"integer"},
+                {"name":"lang", "type":"string", "length":3, "description":"Language"},
+
+                {"name":"user_sid", "type":"integer", "description":"Organization this user belongs to"},
+
+                {"name":"first_name", "type":"string", "length":255, "validation": "required|min:2"},
+                {"name":"middle_name", "type":"string", "length":255, "is_nullable":true},
+                {"name":"last_name", "type":"string", "length":255, "is_nullable":true},
+                {"name":"lc_name", "type":"string", "length":255, "is_nullable":true, "description":"Name in local language"},
+                {"name":"alt_name", "type":"string", "length":255, "is_nullable":true, "description":"Alternative name, e.g. baptism name"},
+
+                {"name":"primary_lang", "type":"string", "length":3, "is_nullable":true, "validation": "min:2|max:3", "description":"Primary language (s)he speaks"},
+                {"name":"nationality_cd", "type":"string", "length":3, "validation": "min:2|max:3"},
+                {"name":"hometown", "type":"string", "length":255, "validation": "required|min:2"},
+                {"name":"gender", "type":"string", "length":255, "is_nullable":true},
+                {"name":"dob", "type":"date", "is_nullable":true, "description":"Date of birth"},
+                {"name":"education_level", "type":"string", "length":64, "is_nullable":true},
+                {"name":"highlight", "type":"text", "is_nullable":true},
+                {"name":"philosophy", "type":"text", "is_nullable":true},
+                {"name":"goals", "type":"text", "is_nullable":true},
+                {"name":"personality_type", "type":"string", "length":255, "is_nullable":true},
+
+                {"name":"location", "type":"string", "length":64 },
+                {"name":"country_cd", "type":"string", "length":3, "validation": "min:2|max:3"},
+                {"name":"province_cd", "type":"string", "length":127, "description": "Province or state"},
+                {"name":"district", "type":"string", "length":127, "description": "District or city"},
+                {"name":"address", "type":"string", "length":255},
+                {"name":"postal_code", "type":"string", "length":64, "is_nullable": true},
+                {"name":"privacy_level", "type":"integer", "is_nullable": true, "description": "0:public, 1:private"},
+
+                {"name":"activity_index", "type":"integer", "is_nullable": true, "description": "How activte the user is"},
+
+                {"name":"params_text", "type":"text", "is_nullable":true}
+            ],
+            "indexes":[
+                {"columns":["uuid"]},
+                {"columns":["domain_id"]},
+                {"columns":["created_by"]},
+                {"columns":["id"], "type": "unique"},
+                {"columns":["organization_sid"]},
+                {"columns":["email"], "type":"unique"},
+                {"columns":["permalink"], "type":"unique"},
+                {"columns":["activation_code"], "type":"unique"}
+            ],
+            "constraints":[
+                {"kind":"foreign", "key":"org_sid", "reference":"sid", "on": "organizations"}
+            ],
+            "relations":[
+                {"kind":"belongs_to", "property":"organization", "entity":"organizations", "foreign_key":"org_sid"}
+            ]
+        }
+
+    }
+}

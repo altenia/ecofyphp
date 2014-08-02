@@ -77,24 +77,12 @@ class UserService extends BaseService  {
         if (true) {
             $record = new User();
             $record->fill($data);
-            $this->setRoleName($record);
+            $this->populateRoleName($record);
 
-            /*
-             * @todo: assign default values as needed
-             */
-            $now = new \DateTime;
-            $now_str = $now->format('Y-m-d H:i:s');
-            $record->uuid = uniqid();
-            $record->created_dt = $now_str;
-            $record->updated_dt = $now_str;
             if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
                 $record->last_session_ip = $_SERVER['HTTP_CLIENT_IP'];
             }
             $record->password = \Hash::make($data['password']);
-
-            $arrModel = $record->toArray();
-            $arrModel['_id'] = new \MongoId();
-            $record->sid = (string)$arrModel['_id'];
 
             $record = $this->dao->insert($record);
 
@@ -139,23 +127,16 @@ class UserService extends BaseService  {
     public function updateUser($pk, $data)
     {
         
-        $validator = \User::validator($data, false);
+        $validator = User::validator($data, false);
         if ($validator->passes()) {
             $record = $this->findUserByPK($pk);
             $record->fill($data);
-            $this->setRoleName($record);
-            $now = new \DateTime;
-            $now_str = $now->format('Y-m-d H:i:s');
-            $record->updated_dt = $now_str;
+            $this->populateRoleName($record);
+
             if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
                 $record->last_session_ip = $_SERVER['HTTP_CLIENT_IP'];
             }
             $record->password = \Hash::make($data['password']);
-
-            $arrModel = $record->toArray();
-            $arrModel['password'] = $record->password;
-
-            $criteria = array( '_id' => new \MongoId($pk) );
             
             return $this->dao->update( $pk, $data );
         } else {
@@ -199,7 +180,7 @@ class UserService extends BaseService  {
      * If a role_sid was assigned and role_name is empty, 
      * fill the role_name from the database
      */
-    private function setRoleName(&$record)
+    private function populateRoleName(&$record)
     {
         if ( isset($record->role_sid) && !empty($record->role_sid))
         {

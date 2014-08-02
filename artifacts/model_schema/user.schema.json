@@ -1,0 +1,72 @@
+{
+    "schema-name": "ecofy",
+    "version": 0.1,
+    "date": "2014-07-32",
+    "description": "Database schema for Ecofy system",
+
+    "entities": {
+        "user": {
+            "plural": "users",
+            "fields":[
+                {"name":"sid", "type":"auto", "is_nullable": false},
+                {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
+                {"name":"domain_sid", "type":"long", "is_nullable": true},
+                {"name":"domain_id", "type":"string", "length":64},
+                {"name":"created_by", "type":"long"},
+                {"name":"created_dt", "type":"datetime"},
+                {"name":"updated_by", "type":"long"},
+                {"name":"updated_dt", "type":"datetime"},
+                {"name":"update_counter", "type":"integer"},
+                {"name":"lang", "type":"string", "length":3, "description":"Language"},
+
+                {"name":"organization_sid", "type":"integer", "description":"Organization this user belongs to"},
+                {"name":"role_sid", "type":"long", "description": "Role"},
+                {"name":"role_name", "type":"string", "length":128, "description": "Role name"},
+
+                {"name":"id", "type":"string", "length":64, "description":"User Id", "validation": "required|alpha_dash|min:6"},
+                {"name":"password", "type":"string", "length":64, "validation": "required|min:6|confirmed"},
+                {"name":"first_name", "type":"string", "length":255, "validation": "required|min:2"},
+                {"name":"middle_name", "type":"string", "length":255, "is_nullable":true},
+                {"name":"last_name", "type":"string", "length":255, "is_nullable":true},
+                {"name":"lc_name", "type":"string", "length":255, "is_nullable":true, "description":"Name in local language"},
+                {"name":"display_name", "type":"string", "length":255, "description":"Name as to be displayed (e.g. nickname)"},
+                {"name":"dob", "type":"date", "is_nullable":true, "description":"Date of birth"},
+                {"name":"phone", "type":"string", "length":32, "is_nullable":true},
+                {"name":"email", "type":"string", "length":64, "is_nullable":true, "validation": "required|email|unique:users"},
+                {"name":"timezone", "type":"string", "length":32, "is_nullable":true},
+
+                {"name":"type", "type":"string", "length":16, "description": "host, regular"},
+                {"name":"permalink", "type":"string", "length":64, "is_nullable":true},
+                {"name":"profile_image_url", "type":"string", "length":255, "is_nullable":true},
+                {"name":"activation_code", "type":"string", "length":64, "is_nullable":true},
+                {"name":"security_question", "type":"string", "length":255, "is_nullable":true},
+                {"name":"security_answer", "type":"string", "length":255, "is_nullable":true},
+                {"name":"session_timestamp", "type":"timestamp", "is_nullable":true, "description": "If currently signed-in, sesssion start timestamp, otherwise null"},
+                {"name":"last_session_ip", "type":"string", "is_nullable":true, "description":"IP from where the user last logged in"},
+                {"name":"last_session_dt", "type":"datetime", "is_nullable":true},
+                {"name":"login_fail_counter", "type":"int", "default": 0, "description": "Consecutive failed login counter"},
+                {"name":"active", "type":"boolean", "default": true, "description": "0-inactive(blocked), 1-active"},
+                {"name":"status", "type":"int", "default": "0", "description": "0-pending confirm, 1-confirmed"},
+                {"name":"default_lang_cd", "type":"string", "length":3, "is_nullable":true},
+                {"name":"expiry_dt", "type":"datetime", "is_nullable":true},
+                {"name":"params_text", "type":"text", "is_nullable":true}
+            ],
+            "indexes":[
+                {"columns":["uuid"]},
+                {"columns":["domain_id"]},
+                {"columns":["creator_sid"]},
+                {"columns":["id"], "type": "unique"},
+                {"columns":["organization_sid"]},
+                {"columns":["email"], "type":"unique"},
+                {"columns":["permalink"], "type":"unique"}
+            ],
+            "constraints":[
+                {"kind":"foreign", "key":"organization_sid", "reference":"sid", "on": "organizations"}
+            ],
+            "relations":[
+                {"kind":"belongs_to", "property":"organization", "entity":"organizations", "foreign_key":"org_sid"}
+            ]
+        }
+
+    }
+}

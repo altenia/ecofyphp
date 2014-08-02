@@ -37,7 +37,7 @@ class Role extends Model {
 	 *
 	 * @var array
 	 */
-    protected $fillable = array('domain_sid','domain_id','creator_sid','created_dt','updated_by','updated_dt','update_counter','uuid','lang','subject_type','name','params_text');
+    protected $fillable = array('domain_sid','domain_id','created_by','created_dt','updated_by','updated_dt','update_counter','uuid','lang','subject_type','name','params_text');
 
     /**
      * Validation rules for creation
@@ -65,7 +65,7 @@ class Role extends Model {
     public static function validator($fields, $is_create = true)
     {
     	$rules = ($is_create) ? static::$validation_rules_create : static::$validation_rules_update;
-        $validator = Validator::make($fields, $rules);
+        $validator = \Validator::make($fields, $rules);
 
         return $validator;
     }

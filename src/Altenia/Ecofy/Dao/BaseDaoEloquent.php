@@ -7,9 +7,9 @@ use Altenia\Ecofy\Support\QueryBuilderEloquent;
  */
 class BaseDaoEloquent extends BaseDao {
 
-	public function __construct($modelName)
+	public function __construct($modelFqn)
     {
-    	parent::__construct($modelName);
+    	parent::__construct($modelFqn);
     }
 
     public function buildQuery($criteria)
@@ -18,6 +18,7 @@ class BaseDaoEloquent extends BaseDao {
         if (empty($criteria)) $criteria = array();
         $queryBuilder = new QueryBuilderEloquent();
         $query = $modelClassName::query();
+        
         $query = $queryBuilder->buildQuery($criteria, $query);
         return $query; 
     }
@@ -49,7 +50,7 @@ class BaseDaoEloquent extends BaseDao {
     public function count($criteria)
     {
         $query = $this->buildQuery($criteria);
-        $count = $query->query()->count();
+        $count = $query->count();
         return $count;
     }
 
@@ -62,6 +63,12 @@ class BaseDaoEloquent extends BaseDao {
      */
     public function insert($record)
     {
+        $record->uuid = $this->genUuid();
+        $dbtime_now = $this->getDateTime();
+        $record->created_dt = $dbtime_now;
+        $record->updated_dt = $dbtime_now;
+
+        $this->beforeInsert($record);
         $record->save();
 
         return $record;
@@ -106,14 +113,16 @@ class BaseDaoEloquent extends BaseDao {
      *
      * @param  int   $pk    The primary key of the record to update
      * @param  array $data  The data of the update
-     * @return mixed null if successful, validation if validation error
+     * @return mixed Returns the newely updated record
      */
     public function update($pk, $data)
     {
-    	$modelClassName = $this->modelClassName();
-
         $record = $this->find($pk);
         $record->fill($data);
+
+        $record->updated_dt = $this->getDateTime();
+        $record->update_counter++;
+
         $record->save();
         return $record;
     }
@@ -135,5 +144,18 @@ class BaseDaoEloquent extends BaseDao {
             return $record;
         }
         return null;
+    }
+
+
+    /**
+     * @param $date Either null or string in iso format
+     */
+    protected function getDateTime($time = null)
+    {
+        $format = 'Y-m-d H:i:s';
+        $time = empty($time) ? new \DateTime : DateTime::createFromFormat($format, $time);
+        $time_str = $time->format('Y-m-d H:i:s');
+
+        return $time_str;
     }
 }

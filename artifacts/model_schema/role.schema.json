@@ -1,0 +1,33 @@
+{
+    "schema-name": "ecofy",
+    "version": 0.1,
+    "date": "2014-07-32",
+    "description": "Database schema for Ecofy system",
+
+    "entities": {
+        "role": {
+            "plural": "roles",
+            "fields":[
+                {"name":"sid", "type":"auto", "is_nullable": false},
+                {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
+                {"name":"domain_sid", "type":"long", "is_nullable": true},
+                {"name":"domain_id", "type":"string", "length":64},
+                {"name":"created_by", "type":"long"},
+                {"name":"created_dt", "type":"datetime"},
+                {"name":"updated_by", "type":"long"},
+                {"name":"updated_dt", "type":"datetime"},
+                {"name":"update_counter", "type":"integer"},
+                {"name":"lang", "type":"string", "length":3, "description":"Language"},
+
+                {"name":"subject_type", "type":"string", "length":16, "description": "organization | user", "validation": "required"},
+                {"name":"name", "type":"string", "length":64, "description":"Role Name", "validation": "required|alpha_dash|min:2"},
+                {"name":"params_text", "type":"text", "is_nullable":true}
+            ],
+            "indexes":[
+                {"columns":["name"], "type":"unique"},
+                {"columns":["domain_sid", "subject_type", "name"], "type":"unique"}
+            ]
+        }
+
+    }
+}

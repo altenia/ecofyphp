@@ -1,0 +1,28 @@
+{
+    "schema-name": "ecofy",
+    "version": 0.1,
+    "date": "2014-07-32",
+    "description": "Database schema for Ecofy system",
+
+    "entities": {
+        "custom_field": {
+            "plural": "custom_fields",
+            "fields": [
+                {"name":"sid", "type":"auto", "is_nullable": false},
+                {"name":"domain_sid", "type":"long", "is_nullable": true},
+
+                {"name":"type", "type":"string", "length":255, "description":"What is being categorized. Convention, the table name", "validation": "required"},
+                {"name":"field_name", "type":"string", "length":255, "validation": "required"},
+                {"name":"data_type", "type":"string", "length":12, "description":"boolean, string, number, currency, date (ISO)", "validation": "required"},
+                {"name":"value", "type":"string", "length":255, "validation": "required"}
+            ],
+            "indexes":[
+                {"columns":["domain_sid"]},
+                {"columns":["type"]},
+                {"columns":["name"]},
+                {"columns":["value"]}
+            ]
+        }
+
+    }
+}

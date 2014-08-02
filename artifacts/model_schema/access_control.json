@@ -1,0 +1,38 @@
+{
+    "schema-name": "ecofy",
+    "version": 0.1,
+    "date": "2014-07-32",
+    "description": "Database schema for Ecofy system",
+
+    "entities": {
+        "access_control": {
+            "plural": "access_controls",
+            "fields":[
+                {"name":"sid", "type":"auto", "is_nullable": false},
+                {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
+                {"name":"domain_sid", "type":"long", "is_nullable": true},
+                {"name":"domain_id", "type":"string", "length":64},
+                {"name":"created_by", "type":"long"},
+                {"name":"created_dt", "type":"datetime"},
+                {"name":"updated_by", "type":"long"},
+                {"name":"updated_dt", "type":"datetime"},
+                {"name":"update_counter", "type":"integer"},
+                {"name":"lang", "type":"string", "length":3, "description":"Language"},
+
+                {"name":"role_sid", "type":"long", "is_nullable": false, "description": "the role", "validation": "required"},
+                {"name":"service", "type":"string", "length":64, "description":"the service (e.g. document, workflow, etc). Maps controller name", "validation": "required|alpha_dash|min:2"},
+                {"name":"permissions", "type":"text", "description":"General permission for this service (bit flag: read, update, create, delete, admin, gread, etc.)", "validation": "required|numeric"},
+                {"name":"policy", "type":"text", "description":"a json { @permission:<flag>, doc_fal1: {@permission:flag}}of permissions with bit flag", "validation": "required|alpha_dash|min:2"},
+                {"name":"params_text", "type":"text", "is_nullable":true}
+            ],
+            "indexes":[
+                {"columns":["uuid"]},
+                {"columns":["domain_id"]},
+                {"columns":["created_by"]},
+                {"columns":["role_sid"]},
+                {"columns":["service"]}
+            ]
+        }
+
+    }
+}

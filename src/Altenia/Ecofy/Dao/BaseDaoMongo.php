@@ -15,11 +15,11 @@ class BaseDaoMongo extends BaseDao {
      * Constructor.
      * Selects the database collection with the name provided.
      */
-	public function __construct($modelName, $collectionName = null)
+	public function __construct($modelFqn, $collectionName = null)
     {
-        parent::__construct($modelName);
+        parent::__construct($modelFqn);
         if ($collectionName === null)
-            $collectionName  = Str::snake($modelName);
+            $collectionName  = Str::snake($modelFqn);
         $this->db = new MongoDb();
         $this->db_collection = $this->db->selectCollection($collectionName);
     }
@@ -81,8 +81,14 @@ class BaseDaoMongo extends BaseDao {
      */
     public function insert($record)
     {
+        $record->uuid = $this->genUuid();
+        $dbtime_now = $this->getDateTime();
+        $record->created_dt = $dbtime_now;
+        $record->updated_dt = $dbtime_now;
+
         $this->beforeInsert($record);
 
+        // Convert to array for Mongo to understand
         $arrModel = $record->toArray();
         $arrModel['_id'] = new \MongoId();
         $record->sid = (string)$arrModel['_id'];
@@ -128,15 +134,19 @@ class BaseDaoMongo extends BaseDao {
      *
      * @param  int   $pk    The primary key of the record to update
      * @param  array $data  The data of the update
-     * @return mixed null if successful, validation if validation error
+     * @return mixed Returns the newely updated record
      */
     public function update($pk, $data)
     {
         $record = $this->findByPK($pk);
         $record->fill($data);
 
+        $record->updated_dt = $this->getDateTime();
+        $record->update_counter++;
+
         $this->beforeUpdate($record);
 
+        // Convert to array for Mongo to understand
         $arrModel = $record->toArray();
         $criteria = array( '_id' => new \MongoId($pk) );
         $this->db_collection->update( $criteria, $arrModel );
@@ -172,9 +182,9 @@ class BaseDaoMongo extends BaseDao {
         return $model;
     }
 
-    protected function getDateTime($date)
+    protected function getDateTime($time = null)
     {
-        return \MongoDate($date);
+        return \MongoDate($time);
     }
 
 }

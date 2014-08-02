@@ -1,6 +1,5 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
-
 use Altenia\Ecofy\Service\BaseService;
 
 /**
@@ -39,7 +38,7 @@ class RoleService extends BaseService {
 	public function paginateRoles($queryParams, $page_size = 20)
 	{
 	    // @TODO: pending
-		$query = \Role::query();
+		$query = Role::query();
 		$query = $this->parseQueryParams($query, $queryParams);
         $records = $query->paginate($page_size);
 		return $records;
@@ -65,26 +64,12 @@ class RoleService extends BaseService {
 	 */
 	public function createRole($data)
 	{
-
-		$validator = \Role::validator($data);
+		$validator = Role::validator($data);
         if ($validator->passes()) {
-            $record = new \Role();
+            $record = new Role();
             $record->fill($data);
 
-            /*
-             * @todo: assign default values as needed
-             */
-            $now = new \DateTime;
-            $now_str = $now->format('Y-m-d H:i:s');
-            $record->uuid = uniqid();
-            $record->created_dt = $now_str;
-            $record->updated_dt = $now_str;
-
-            $arrModel = $record->toArray();
-            $arrModel['_id'] = new \MongoId();
-            $record->sid = (string)$arrModel['_id'];
-
-            return $dao->insert($record);
+            return $this->dao->insert($record);
         } else {
             throw new ValidationException($validator);
         }
@@ -121,17 +106,10 @@ class RoleService extends BaseService {
 	 */
 	public function updateRole($pk, $data)
 	{
-		$validator = \Role::validator($data);
+		$validator = Role::validator($data);
         if ($validator->passes()) {
             $record = $this->findRoleByPK($pk);
             $record->fill($data);
-
-            $now = new \DateTime;
-            $now_str = $now->format('Y-m-d H:i:s');
-            $record->updated_dt = $now_str;
-
-            $arrModel = $record->toArray();
-            $criteria = array( '_id' => new \MongoId($pk) );
             
             return $this->dao->update( $pk, $data );
         } else {

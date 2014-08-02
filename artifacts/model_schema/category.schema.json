@@ -1,0 +1,42 @@
+{
+    "schema-name": "ecofy",
+    "version": 0.1,
+    "date": "2014-07-32",
+    "description": "Database schema for Ecofy system",
+
+    "entities": {
+        "category": {
+            "plural": "categories",
+            "fields": [
+                {"name":"sid", "type":"auto", "is_nullable": false},
+                {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
+                {"name":"domain_sid", "type":"long", "is_nullable": true},
+                {"name":"domain_id", "type":"string", "length":64},
+                {"name":"created_by", "type":"long"},
+                {"name":"created_dt", "type":"datetime"},
+                {"name":"updated_by", "type":"long"},
+                {"name":"updated_dt", "type":"datetime"},
+                {"name":"update_counter", "type":"integer"},
+                {"name":"lang", "type":"string", "length":3, "description":"Language"},
+
+                {"name":"parent_sid", "type":"long", "is_nullable": true},
+                {"name":"type", "type":"string", "length":255, "description":"What is being categorized. Convention, the table name", "validation": "required"},
+                {"name":"name", "type":"string", "length":255, "validation": "required"},
+                {"name":"code", "type":"string", "length":255, "is_nullable": true, "description":"Additional code associated with this category"},
+                {"name":"description", "type":"text", "is_nullable": true},
+                {"name":"image_url", "type":"string", "length":255, "is_nullable": true},
+                {"name":"position", "type":"int", "default": 0, "description": "the display positioning"},
+                {"name":"params_text", "type":"text", "is_nullable": true}
+            ],
+            "indexes":[
+                {"columns":["uuid"]},
+                {"columns":["domain_id"]},
+                {"columns":["created_by"]},
+                {"columns":["parent_sid"]},
+                {"columns":["type"]},
+                {"columns":["name"]}
+            ]
+        }
+
+    }
+}

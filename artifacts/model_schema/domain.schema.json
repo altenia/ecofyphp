@@ -1,0 +1,61 @@
+{
+    "schema-name": "ecofy",
+    "version": 0.1,
+    "date": "2014-07-32",
+    "description": "Database schema for Ecofy system",
+
+    "entities": {
+        "domain": {
+            "plural": "domains",
+            "fields":[
+                {"name":"sid", "type":"auto", "is_nullable": false},
+                {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
+                {"name":"created_by", "type":"long"},
+                {"name":"created_dt", "type":"datetime"},
+                {"name":"updated_by", "type":"long"},
+                {"name":"updated_dt", "type":"datetime"},
+                {"name":"update_counter", "type":"integer"},
+                {"name":"lang", "type":"string", "length":3, "description":"Language"},
+
+                {"name":"owner_sid", "type":"long", "is_nullable": false},
+                {"name":"parent_sid", "type":"long", "is_nullable": true, "description": "The parent organization"},
+                {"name":"category_sid", "type":"long", "description": "The organization category"},
+
+                {"name":"id", "type":"string", "length":64, "description":"User Id", "validation": "required|alpha_dash|min:6"},
+                {"name":"name", "type":"string", "length":128, "validation": "required|alpha_dash|min:4"},
+                {"name":"name_lc", "type":"string", "length":128, "is_nullable": true},
+                {"name":"intro", "type":"text", "is_nullable": true},
+                {"name":"description", "type":"text", "is_nullable": true},
+                {"name":"logo_image_url", "type":"string", "length":255, "is_nullable": true},
+                {"name":"cover_image_url", "type":"string", "length":255, "is_nullable": true},
+                {"name":"policy", "type":"text", "is_nullable": true},
+                {"name":"privacy_level", "type":"integer", "is_nullable": true, "description": "0:public, 1:private"},
+
+                {"name":"type", "type":"string", "length":16, "description": "host, regular"},
+                {"name":"active", "type":"boolean", "default": true, "description": "0-inactive(blocked), 1-active"},
+                {"name":"status", "type":"int", "default": "0", "description": "0-pending confirm, 1-confirmed"},
+                {"name":"num_users", "type":"integer", "default":0},
+                {"name":"num_organizations", "type":"integer", "default":0},
+                {"name":"params_text", "type":"text", "is_nullable": true}
+            ],
+            "indexes":[
+                {"columns":["uuid"]},
+                {"columns":["domain_id"]},
+                {"columns":["created_by"]},
+                {"columns":["id"], "type": "unique"},
+                {"columns":["owner_sid"]},
+                {"columns":["name"]},
+                {"columns":["category_sid"]},
+                {"columns":["active"]},
+                {"columns":["status"]}
+            ],
+            "constraints":[
+                {"kind":"foreign", "key":"owner_sid", "reference":"sid", "on": "users"}
+            ],
+            "relations":[
+                {"kind":"has_many", "property":"members", "entity":"users", "foreign_key":"owner_sid"}
+            ]
+        }
+
+    }
+}

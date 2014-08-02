@@ -11,9 +11,9 @@ class RoleDaoMongo extends BaseDaoMongo  {
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($collectionName = 'role')
     {
-        parent::__construct('Altenia\Ecofy\CoreService\Role');
+        parent::__construct('Altenia\Ecofy\CoreService\Role', $collectionName);
     }
 
 

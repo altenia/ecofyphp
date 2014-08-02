@@ -3,17 +3,16 @@
 use Altenia\Ecofy\Dao\BaseDaoMongo;
 
 /**
- * Service class that provides business logic for User
+ * DAO class that provides business logic for User
  */
-/* implements UserProviderInterface */
 class UserDaoMongo extends BaseDaoMongo  {
 
     /**
      * Constructor
      */
-    public function __construct()
+    public function __construct($collectionName = 'user')
     {
-        parent::__construct('Altenia\Ecofy\CoreService\User');
+        parent::__construct('Altenia\Ecofy\CoreService\User', $collectionName);
     }
 
 

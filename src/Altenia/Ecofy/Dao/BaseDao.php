@@ -1,5 +1,7 @@
 <?php namespace Altenia\Ecofy\Dao;
 
+use Altenia\Ecofy\Util\UuidUtil;
+
 /**
  * Helper class that provides HTML rendering functionalites.
  */
@@ -17,13 +19,18 @@ abstract class BaseDao {
      */
     public function modelClassName()
     {
-        return '\'' . $this->modelFqn;
+        return '\\' . $this->modelFqn;
     }
 
     public function newModel()
     {
     	$modelClassName = $this->modelClassName();
     	$model = new $modelClassName();
+    }
+
+    public function genUuid()
+    {
+        return UuidUtil::generate();
     }
 
     // Template method called prior insertion

@@ -63,7 +63,7 @@ class Comment extends Model {
     public static function validator($fields, $is_create = true)
     {
     	$rules = ($is_create) ? static::$validation_rules_create : static::$validation_rules_update;
-        $validator = Validator::make($fields, $rules);
+        $validator = \Validator::make($fields, $rules);
 
         return $validator;
     }

@@ -1,6 +1,9 @@
-<?php namespace Altenia\Ecofy\Service;
+<?php namespace Altenia\Ecofy\Support;
 
 use Altenia\Ecofy\Util\StringUtil;
+use Altenia\Ecofy\Service\ServiceRegistry;
+use Altenia\Ecofy\CoreService\PredefinedAcl;
+
 /**
  * Authorization (AccessControl) Facade
  */
@@ -10,7 +13,7 @@ class AuthzFacade {
 		
 	public static function getAccessControlService() {
 		if (self::$accessControlService == null) {
-			self::$accessControlService = ServiceRegistry::instance()->findServiceById('access_control');
+			self::$accessControlService = ServiceRegistry::instance()->findById('access_control');
 		}
 		return self::$accessControlService;
 	}
@@ -32,9 +35,35 @@ class AuthzFacade {
 	/**
 	 *
 	 */
+	public static function getAccessControl($user)
+	{
+		$ac = null;
+		if (!empty($user)) {
+		    if (!empty($user->type)) {
+		    	$ac = PredefinedAcl::get($user->type);
+		    } else if (self::getAccessControlService() != null && 
+				!empty($user->role_sid)
+				) {
+				$criteria = array( 'role_sid' => $user->role_sid, 'service' => 'root' );
+		        $ac = self::getAccessControlService()->findAccessControl($criteria);
+		    }
+		}
+    	if (empty($ac)) {
+    		$ac = PredefinedAcl::get('default');
+    	}
+
+		return $ac;
+	}
+
+	/**
+	 *
+	 */
 	public static function check($permission, $resource)
 	{
-		$ac = self::getAccessControlService()->findAccessControlByUser(\Auth::user());
+		$user = \Auth::user();
+
+		$ac = self::getAccessControl($user);
+
 		return $ac->check($permission, $resource);
 	}
 
@@ -82,8 +111,7 @@ class AuthzFacade {
 		}
 		$serviceName = snake_case($serviceName);
 
-		$serviceRegistry = \App::make('svc:service_registry');
-		$serviceInfo = $serviceRegistry->findServiceById($serviceName);
+		$serviceInfo = ServiceRegistry::instance()->findById($serviceName);
 		if ($serviceInfo !== null) {
 			// parameters's sample: Array ( [document_types] => ~fal1 [documents] => 536ecb2abf5c35d03c0041af ) 
 			// @todo - remove initial non-resource params (e.g. the domainId)

@@ -69,11 +69,21 @@ class ServiceRegistry {
 
 
     /**
-     * Returns list of the records.
+     * Returns list of all services
      *
      * @return array of all registered services
      */
     public function getAll()
+    {
+        return $this->services;
+    }
+
+    /**
+     * Returns list of the services by type.
+     *
+     * @return array of all registered services
+     */
+    public function getByType($serviceType)
     {
         return $this->services;
     }

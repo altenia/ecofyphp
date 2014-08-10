@@ -1,57 +1,12 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
-use Altenia\Ecofy\Service\BaseService;
-
-
-class PredefinedAcl
-{
-    // @TODO take this away from here
-    public static $serviceAcl = array();
-
-    public static function get($role) {
-        if (self::$serviceAcl == null) {
-            self::$serviceAcl = array();
-            $adminAc = new \AccessControl();
-            $adminAc->permissions = 31;
-            $adminAc->setPolicyFromJson('
-                    {
-                        "svc:user": {"@permissions": 31},
-                        "svc:organization": {"@permissions": 31},
-                        "svc:role": {"@permissions": 31},
-                        "svc:document_type": {"@permissions": 31},
-                        "svc:workflow": {"@permissions": 31}
-                    }');
-            self::$serviceAcl['admin'] = $adminAc;
-
-            $staffAc = new \AccessControl();
-            $staffAc->permissions = 31;
-            $staffAc->setPolicyFromJson('
-                    {
-                        "svc:user": {"@permissions": 15},
-                        "svc:organization": {"@permissions": 31},
-                        "svc:document_type": {"@permissions": 7}
-                    }');
-            self::$serviceAcl['staff'] = $staffAc;
-
-
-            $defaultAc = new \AccessControl();
-            $defaultAc->permissions = 1;
-            $defaultAc->setPolicyFromJson('
-                    {
-                    }');
-            self::$serviceAcl['default'] = $defaultAc;
-        }
-        if (array_key_exists($role, self::$serviceAcl)) {
-            return self::$serviceAcl[$role];
-        }
-        return self::$serviceAcl['default'];
-    }
-}
+use Altenia\Ecofy\Service\BaseDataService;
+use Altenia\Ecofy\Service\ValidationException;
 
 /**
  * Service class that provides business logic for access_control
  */
-class AccessControlService extends BaseService {
+class AccessControlService extends BaseDataService {
 
     /**
      * Constructor
@@ -157,7 +112,7 @@ class AccessControlService extends BaseService {
 		$validator = \AccessControl::validator($data);
         if ($validator->passes()) {
 
-            return $this->dao->update( $pk, $data );
+            return $this->dao->updateFields( $pk, $data );
         } else {
             throw new ValidationException($validator);
         }

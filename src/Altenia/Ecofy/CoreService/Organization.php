@@ -78,4 +78,10 @@ class Organization extends Model {
     {
         return $this->hasMany('Users');
     }
+
+
+    public function getName()
+    {
+        return $this->name;
+    }
 }

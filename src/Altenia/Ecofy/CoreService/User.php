@@ -45,7 +45,7 @@ class User extends Model implements UserInterface, RemindableInterface {
      *
      * @var array
      */
-    protected $hidden = array('password');
+    protected $hidden = array('password', 'remember_token');
 
     /**
      * Get the unique identifier for the user.
@@ -87,7 +87,6 @@ class User extends Model implements UserInterface, RemindableInterface {
 
     private static $validation_rules_update = array(
         'id' => 'required|min:4',
-        'password' => 'required|min:4',
         'first_name' => 'required|min:2',
         'email' => 'required|email'
         );

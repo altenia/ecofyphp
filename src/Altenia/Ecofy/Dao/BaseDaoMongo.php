@@ -130,17 +130,14 @@ class BaseDaoMongo extends BaseDao {
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource.
      *
      * @param  int   $pk    The primary key of the record to update
      * @param  array $data  The data of the update
      * @return mixed Returns the newely updated record
      */
-    public function update($pk, $data)
+    public function update($record)
     {
-        $record = $this->findByPK($pk);
-        $record->fill($data);
-
         $record->updated_dt = $this->getDateTime();
         $record->update_counter++;
 
@@ -152,6 +149,20 @@ class BaseDaoMongo extends BaseDao {
         $this->db_collection->update( $criteria, $arrModel );
 
         return $record;
+    }
+
+    /**
+     * Update the fields.
+     *
+     * @param  int   $pk    The primary key of the record to update
+     * @param  array $data  Fields to update
+     * @return mixed Returns the newely updated record
+     */
+    public function updateFields($pk, $data)
+    {
+        $record = $this->find($pk);
+        $record->fill($data);
+        return $this->update($record);
     }
 
     /**

@@ -8,9 +8,6 @@ class BaseService {
 	/** Service id **/
 	private $id;
 
-	/** Main DataAccessObject **/
-	protected $dao;
-
 	/**
 	 * The service that contains this service.
 	 * E.g. In blog-comment relation, the Blog service will be container, and comment will be contained
@@ -26,17 +23,18 @@ class BaseService {
 	/** Reference to the access control service **/
 	private $acessControlService = null;
 
-	public function __construct($dao, $id)
+	public function __construct($id)
     {
-    	$this->dao = $dao; 
         $this->id = $id;
     }
 
+    /**
+     * Returns the id
+     */
 	public function getId()
 	{
 		return $this->id;
 	}
-
 
 	/**
 	 * 
@@ -76,7 +74,8 @@ class BaseService {
 	}
 
 	/**
-	 * Returns the the path fo the servers from the root service
+	 * Returns the the path of the servers from the root service
+	 * @param array
 	 */
 	public function getServicePath()
 	{
@@ -92,7 +91,7 @@ class BaseService {
 	}
 
 	/**
-	 * 
+	 * Adds a contained (e.g. child) service
 	 * @param {string | Object} $sevice
 	 */
 	public function addContainedService($service)
@@ -109,12 +108,14 @@ class BaseService {
 		}
 	}
 
-
+	/**
+	 * Returns the access control service
+	 */
 	public function getAccessControlService()
 	{
 		if ($this->acessControlService == null) {
 			// @todo - externalize the access_control service name
-			$this->acessControlService = ServiceRegistry::instance()->findServiceById('access_control');
+			$this->acessControlService = ServiceRegistry::instance()->findById('access_control');
 		}
 		return $this->acessControlService;
 		

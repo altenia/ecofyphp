@@ -1,6 +1,8 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
 use Altenia\Ecofy\Service\BaseService;
+use Altenia\Ecofy\Service\ServiceRegistry;
+use Altenia\Ecofy\Support\AuthzFacade;
 
 /**
  * Service class that provides business logic for category
@@ -14,7 +16,7 @@ class MenuService extends BaseService {
      */
     public function __construct($id = 'menu')
     {
-        parent::__construct(null, $id);
+        parent::__construct($id);
     }
 
     /**
@@ -40,15 +42,16 @@ class MenuService extends BaseService {
 
         if(\Auth::check())
         {
-            $ac = $this->getAccessControlService()->findAccessControlByUser(\Auth::user());
+            //$ac = $this->getAccessControlService()->findAccessControlByUser(\Auth::user());
+            $ac = AuthzFacade::getAccessControl(\Auth::user());
 
             // Populate the admin menu {{
-            $serviceRegistry = \App::make('svc:service_registry');
+            $serviceRegistry = ServiceRegistry::instance();
 
             $menu_admin = array();
-            foreach ($serviceRegistry->listServices() as $serviceInfo) {
+            foreach ($serviceRegistry->getAll() as $serviceInfo) {
                 if ( !($serviceInfo->reference instanceof MenuService) ) {
-                    if ($ac->check(\AccessControl::FLAG_READ, 'svc:' . $serviceInfo->reference->getId())) {
+                    if ($ac->check(AccessControl::FLAG_READ, 'svc:' . $serviceInfo->reference->getId())) {
                         $menu_admin[] = self::createMenuItem($serviceInfo->title, $serviceInfo->url, $serviceInfo->icon);    
                     }
                 }

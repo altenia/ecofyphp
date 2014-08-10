@@ -77,13 +77,22 @@ abstract class BaseDao {
     abstract public function findByPK($pk);
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource.
      *
      * @param  int   $pk    The primary key of the record to update
      * @param  array $data  The data of the update
      * @return mixed null if successful, validation if validation error
      */
-    abstract public function update($pk, $data);
+    abstract public function update($record);
+
+    /**
+     * Update the fields.
+     *
+     * @param  int   $pk    The primary key of the record to update
+     * @param  array $data  Fields to update
+     * @return mixed Returns the newely updated record
+     */
+    abstract public function updateFields($pk, $data);
 
 
     /**

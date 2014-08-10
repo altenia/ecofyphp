@@ -5,9 +5,11 @@ use Altenia\Ecofy\Support\QueryBuilderEloquent;
 /**
  * Helper class that provides HTML rendering functionalites.
  */
-class BaseDaoEloquent extends BaseDao {
+class BaseDaoArray extends BaseDao {
 
-	public function __construct($modelFqn)
+    private $records = array();
+
+	public function __construct($modelFqn, $key)
     {
     	parent::__construct($modelFqn);
     }
@@ -135,7 +137,7 @@ class BaseDaoEloquent extends BaseDao {
      */
     public function updateFields($pk, $data)
     {
-        $record = $this->findByPK($pk);
+        $record = $this->find($pk);
         $record->fill($data);
         return $this->update($record);
     }

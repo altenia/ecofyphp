@@ -4,14 +4,14 @@ use Altenia\Ecofy\Service\BaseDataService;
 use Altenia\Ecofy\Service\ValidationException;
 
 /**
- * Service class that provides business logic for organization
+ * Service class that provides business logic for code_ref
  */
-class OrganizationService extends BaseDataService {
+class CodeRefService extends BaseDataService {
 
     /**
      * Constructor
      */
-    public function __construct($dao, $id = 'organization')
+    public function __construct($dao, $id = 'code_ref')
     {
         parent::__construct($dao, $id);
     }
@@ -24,7 +24,7 @@ class OrganizationService extends BaseDataService {
 	 * @param int   $limit        Maximum number of records to retrieve
 	 * @return Response
 	 */
-	public function listOrganizations($criteria, $sortParams = array(), $offset = 0, $limit=100)
+	public function listCodeRefs($criteria, $sortParams = array(), $offset = 0, $limit=100)
 	{
 		return $this->dao->query($criteria, $sortParams, $offset, $limit);
 	}
@@ -36,10 +36,10 @@ class OrganizationService extends BaseDataService {
 	 * @param int   $page_size    The max number of entries shown per page
 	 * @return Response
 	 */
-	public function paginateOrganizations($queryParams, $page_size = 20)
+	public function paginateCodeRefs($queryParams, $page_size = 20)
 	{
 	    // @TODO: pending
-		$query = \Organization::query();
+		$query = CodeRef::query();
 		$query = $this->parseQueryParams($query, $queryParams);
         $records = $query->paginate($page_size);
 		return $records;
@@ -51,7 +51,7 @@ class OrganizationService extends BaseDataService {
 	 * @param array $criteria  Parameters used for querying
 	 * @return int number of records that satisfied the criteria
 	 */
-	public function countOrganizations($criteria)
+	public function countCodeRefs($criteria)
 	{
 		return $this->dao->count($criteria);
 	}
@@ -63,11 +63,11 @@ class OrganizationService extends BaseDataService {
 	 * @param array $data  Parameters used for creating a new record
 	 * @return mixed  null if successful, validation object validation fails
 	 */
-	public function createOrganization($data)
+	public function createCodeRef($data)
 	{
-		$validator = Organization::validator($data);
+		$validator = CodeRef::validator($data);
         if ($validator->passes()) {
-            $record = new Organization();
+            $record = new CodeRef();
             $record->fill($data);
 
             return $this->dao->insert($record);
@@ -80,9 +80,9 @@ class OrganizationService extends BaseDataService {
 	 * Retrieves a single record.
 	 *
 	 * @param  array $criteria  The criteria to retrieve a single record
-	 * @return Organization
+	 * @return CodeRef
 	 */
-	public function findOrganization($criteria)
+	public function findCodeRef($criteria)
 	{
         return $dao->find($criteria);
 	}
@@ -91,9 +91,9 @@ class OrganizationService extends BaseDataService {
 	 * Retrieves a single record.
 	 *
 	 * @param  int $pk  The primary key for the search
-	 * @return Organization
+	 * @return CodeRef
 	 */
-	public function findOrganizationByPK($pk)
+	public function findCodeRefByPK($pk)
 	{
 		return $this->dao->findByPK($pk);
 	}
@@ -105,9 +105,9 @@ class OrganizationService extends BaseDataService {
 	 * @param  array $data  The data of the update
 	 * @return mixed null if successful, validation if validation error
 	 */
-	public function updateOrganization($pk, $data)
+	public function updateCodeRef($pk, $data)
 	{
-		$validator = Organization::validator($data);
+		$validator = CodeRef::validator($data);
         if ($validator->passes()) {
             
             return $this->dao->updateFields( $pk, $data );
@@ -122,7 +122,7 @@ class OrganizationService extends BaseDataService {
 	 * @param  int  $pk
 	 * @return Object the object that was deleted, null if not found
 	 */
-	public function destroyOrganization($pk)
+	public function destroyCodeRef($pk)
 	{
 		return $this->dao->delete($pk);
 	}

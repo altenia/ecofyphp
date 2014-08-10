@@ -22,7 +22,6 @@ class UserDaoMongo extends BaseDaoMongo  {
         $model->sid = (string)$doc['_id'];
 
         $model->fill($doc);
-        $model->password = array_get($doc, 'password', '-');
 
         return $model;
     }

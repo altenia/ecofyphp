@@ -81,6 +81,12 @@ class AccessControl extends Model {
     }
 
     //////////
+
+    public function getName()
+    {
+        return $this->service;
+    }
+    
     const ATTR_PERMISSIONS = '@permissions';
 
     const FLAG_NONE = 0;

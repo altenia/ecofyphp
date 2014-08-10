@@ -24,6 +24,8 @@ class GenericServiceController extends \BaseController {
 	protected $moduleName;
 	protected $moduleNamePlural;
 
+	protected $indexRetrievalMethod = 'list';
+
 	protected $layout;
 
 	/**
@@ -37,6 +39,7 @@ class GenericServiceController extends \BaseController {
 		$this->moduleName = snake_case($modelName);
 		$this->moduleNamePlural = snake_case($this->modelNamePlural);
 
+		// @todo - change to use ServiceRegistry
         $this->service = \App::make($serviceInstanceName);
 
 		$this->layout = $layoutName;
@@ -54,7 +57,7 @@ class GenericServiceController extends \BaseController {
 		$queryCtx = new QueryContext(true);
 		$criteria = $queryCtx->buildCriteria();
 
-		$listMethod = 'list' . $this->modelNamePlural;
+		$listMethod = $this->indexRetrievalMethod . $this->modelNamePlural;
 		$records = $this->service->$listMethod($criteria, array(), $queryCtx->getOffset(), $queryCtx->limit);
 		$this->layout->content = \View::make($this->moduleName . '.index')
 			->with('queryCtx', $queryCtx)
@@ -96,7 +99,8 @@ class GenericServiceController extends \BaseController {
             	);
         } catch (ValidationException $ve) {
             return \Redirect::to( route($this->moduleNamePlural . '.create'))
-                ->withErrors($ve->getObject());
+                ->withErrors($ve->getObject())
+                ->withInput();
         }
 	}
 
@@ -147,8 +151,7 @@ class GenericServiceController extends \BaseController {
 	 */
 	public function update($id)
 	{
-
-		$data = Input::all();
+		$data = \Input::all();
 		
 		try {
 			$updateMethod = 'update' . $this->modelName;

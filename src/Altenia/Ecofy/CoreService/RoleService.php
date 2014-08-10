@@ -1,12 +1,12 @@
 <?php namespace Altenia\Ecofy\CoreService;
 
-use Altenia\Ecofy\Service\BaseService;
+use Altenia\Ecofy\Service\BaseDataService;
 use Altenia\Ecofy\Service\ValidationException;
 
 /**
  * Service class that provides business logic for role
  */
-class RoleService extends BaseService {
+class RoleService extends BaseDataService {
 
     /**
      * Constructor
@@ -109,10 +109,8 @@ class RoleService extends BaseService {
 	{
 		$validator = Role::validator($data);
         if ($validator->passes()) {
-            $record = $this->findRoleByPK($pk);
-            $record->fill($data);
             
-            return $this->dao->update( $pk, $data );
+            return $this->dao->updateFields( $pk, $data );
         } else {
             throw new ValidationException($validator);
         }

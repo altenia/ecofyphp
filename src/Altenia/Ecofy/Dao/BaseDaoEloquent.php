@@ -41,6 +41,7 @@ class BaseDaoEloquent extends BaseDao {
         return $records;
     }
 
+
     /**
      * Returns the count of records satisfying the critieria.
      *
@@ -54,6 +55,16 @@ class BaseDaoEloquent extends BaseDao {
         return $count;
     }
 
+    /**
+     * Pagination
+     * @param int   $limit        Maximum number of records to retrieve
+     */
+    public function paginate($criteria, $sortParams = array(), $page_size)
+    {
+        $query = $this->buildQuery($criteria);
+        $records = $query->paginate($page_size);
+        return $records;
+    }
     /**
      * Inserts record.
      * Mostly wrapper around insert with pre and post processing.

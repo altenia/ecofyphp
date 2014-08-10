@@ -38,13 +38,11 @@ class UserService extends BaseDataService  {
      * @param int   $page_size    The max number of entries shown per page
      * @return Response
      */
-    public function paginateAccounts($criteria, $sortParams = array(), $page_size = 20)
+    public function paginateUsers($criteria, $sortParams = array(), $page_size = 20)
     {
-        $items = $this->listUsers($criteria, $sortParams, $offset, $limit);
-        $totalItems = $this->countUsers($criteria);
-        // @todo
-        //$paginator = Paginator::make($items, $totalItems, $perPage);
+        return $this->dao->paginate($criteria, $sortParams, $page_size);
     }
+
     /**
      * Returns the count of records satisfying the critieria.
      *
@@ -65,13 +63,12 @@ class UserService extends BaseDataService  {
      */
     public function createUser($data)
     {
-        //$data['id'] = str_replace('@', '_', $data['email']);
-
+        if (!array_key_exists('id', $data)) {
+            $data['id'] = str_replace('@', '_', $data['email']);
+        }
         if (empty($data['display_name'])) {
             $data['display_name'] = $data['first_name'] . ' ' . $data['last_name'];
         }
-
-        $data['type'] = '';
 
         $validator = User::validator($data);
         if ($validator->passes()) {

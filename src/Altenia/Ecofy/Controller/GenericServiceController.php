@@ -192,7 +192,7 @@ class GenericServiceController extends \BaseController {
 	 * Method to return values that 
 	 * Overridable 
 	 */
-	public function indexAuxData() {
+	protected function indexAuxData() {
 		return null;
 	}
 
@@ -200,7 +200,7 @@ class GenericServiceController extends \BaseController {
 	 * Method to return values that 
 	 * Overridable 
 	 */
-	public function createAuxData() {
+	protected function createAuxData() {
 		return null;
 	}
 
@@ -208,7 +208,7 @@ class GenericServiceController extends \BaseController {
 	 * Method to return values that 
 	 * Overridable 
 	 */
-	public function showAuxData($record) {
+	protected function showAuxData($record) {
 		return null;
 	}
 
@@ -216,8 +216,40 @@ class GenericServiceController extends \BaseController {
 	 * Method to return values that 
 	 * Overridable 
 	 */
-	public function editAuxData($record) {
+	protected function editAuxData($record) {
 		return null;
+	}
+
+	/**
+	 * Method that is called before creating
+	 * @param array $data  the array fromwhich the record will be created
+	 */
+	protected function beforeRecordCreate(&$data) {
+
+	}
+
+	/**
+	 * Method that is called after record is created
+	 * @param object $record the record that was created
+	 */
+	protected function afterRecordCreate(&$record) {
+
+	}
+
+	/**
+	 * Method that is called before creating
+	 * @param array $data  the array fromwhich the record will be created
+	 */
+	protected function beforeRecordUpdate(&$data) {
+
+	}
+
+	/**
+	 * Method that is called after record is created
+	 * @param object $record the record that was created
+	 */
+	protected function afterRecordUpdate(&$record) {
+
 	}
  
 }

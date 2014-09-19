@@ -72,8 +72,9 @@ class UserService extends BaseDataService  {
 
         $validator = User::validator($data);
         if ($validator->passes()) {
-        //if (true) {
+
             $record = new User();
+            $this->prepForInsert($record);
             $record->fill($data);
             $this->populateRoleName($record);
 

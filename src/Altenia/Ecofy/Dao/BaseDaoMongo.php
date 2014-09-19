@@ -82,9 +82,10 @@ class BaseDaoMongo extends BaseDao {
     public function insert($record)
     {
         $record->uuid = $this->genUuid();
-        $dbtime_now = $this->toDbDateTime();
+        $dbtime_now = $this->toDbDateTime(new \DateTime);
         $record->created_dt = $dbtime_now;
         $record->updated_dt = $dbtime_now;
+        $record->update_counter = 0;
 
         $this->beforeInsert($record);
 

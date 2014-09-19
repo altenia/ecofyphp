@@ -82,7 +82,7 @@ class BaseDaoMongo extends BaseDao {
     public function insert($record)
     {
         $record->uuid = $this->genUuid();
-        $dbtime_now = $this->getDateTime();
+        $dbtime_now = $this->toDbDateTime();
         $record->created_dt = $dbtime_now;
         $record->updated_dt = $dbtime_now;
 
@@ -138,7 +138,7 @@ class BaseDaoMongo extends BaseDao {
      */
     public function update($record)
     {
-        $record->updated_dt = $this->getDateTime();
+        $record->updated_dt = $this->toDbDateTime();
         $record->update_counter++;
 
         $this->beforeUpdate($record);
@@ -193,9 +193,26 @@ class BaseDaoMongo extends BaseDao {
         return $model;
     }
 
-    protected function getDateTime($time = null)
+    protected function toDbDateTime($time = null)
     {
+        if (empty($time))
+            return null;
         return \MongoDate($time);
+    }
+
+    /**
+     * Returns the DB date to ISO date time
+     * @param $date Either null or string in iso format
+     */
+    protected function toIsoDateTime($time = null)
+    {
+        if (empty($time))
+            return null;
+        $format = 'Y-m-d H:i:s';
+        $time = DateTime::createFromFormat($format, $time);
+        $time_str = $time->format(DateTime::ISO8601);
+
+        return $time_str;
     }
 
 }

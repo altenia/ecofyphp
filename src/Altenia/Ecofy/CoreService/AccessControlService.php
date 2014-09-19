@@ -86,7 +86,7 @@ class AccessControlService extends BaseDataService {
 	 */
 	public function findAccessControl($criteria)
 	{
-		return $dao->find($criteria);
+		return $this->dao->find($criteria);
 	}
 
 	/**

@@ -84,7 +84,7 @@ class CategoryService extends BaseDataService {
 	 */
 	public function findCategory($criteria)
 	{
-        return $dao->find($criteria);
+        return $this->dao->find($criteria);
 	}
 
 	/**

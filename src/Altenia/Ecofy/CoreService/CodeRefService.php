@@ -84,7 +84,7 @@ class CodeRefService extends BaseDataService {
 	 */
 	public function findCodeRef($criteria)
 	{
-        return $dao->find($criteria);
+        return $this->dao->find($criteria);
 	}
 
 	/**

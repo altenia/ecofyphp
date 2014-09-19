@@ -84,7 +84,7 @@ class PersonService extends BaseDataService {
 	 */
 	public function findPerson($criteria)
 	{
-        return $dao->find($criteria);
+        return $this->dao->find($criteria);
 	}
 
 	/**

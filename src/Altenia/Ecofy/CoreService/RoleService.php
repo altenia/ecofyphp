@@ -84,7 +84,7 @@ class RoleService extends BaseDataService {
 	 */
 	public function findRole($criteria)
 	{
-        return $dao->find($criteria);
+        return $this->dao->find($criteria);
 	}
 
 	/**

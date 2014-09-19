@@ -84,7 +84,7 @@ class OrganizationService extends BaseDataService {
 	 */
 	public function findOrganization($criteria)
 	{
-        return $dao->find($criteria);
+        return $this->dao->find($criteria);
 	}
 
 	/**

@@ -84,7 +84,7 @@ class EntityService extends BaseDataService {
 	 */
 	public function findEntity($criteria)
 	{
-        return $dao->find($criteria);
+        return $this->dao->find($criteria);
 	}
 
 	/**

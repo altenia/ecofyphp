@@ -7,14 +7,14 @@ use Altenia\Ecofy\Support\QueryBuilderEloquent;
  */
 class BaseDaoEloquent extends BaseDao {
 
-	public function __construct($modelFqn)
+    public function __construct($modelFqn)
     {
-    	parent::__construct($modelFqn);
+        parent::__construct($modelFqn);
     }
 
     public function buildQuery($criteria)
     {
-    	$modelClassName = $this->modelClassName();
+        $modelClassName = $this->modelClassName();
         if (empty($criteria)) $criteria = array();
         $queryBuilder = new QueryBuilderEloquent();
         $query = $modelClassName::query();
@@ -94,13 +94,13 @@ class BaseDaoEloquent extends BaseDao {
      */
     public function find($criteria)
     {
-    	$query = $this->buildQuery($criteria);
+        $query = $this->buildQuery($criteria);
         $records = $query->take(2)->get();
 
         if ($records->count() > 1) {
-        	throw new \Exception("More than one entry found");
+            throw new \Exception("More than one entry found");
         } else if ($records->count() !== 1) {
-        	return null;
+            return null;
         }
 
         return $records->first();
@@ -114,7 +114,7 @@ class BaseDaoEloquent extends BaseDao {
      */
     public function findByPK($pk)
     {
-    	$modelClassName = $this->modelClassName();
+        $modelClassName = $this->modelClassName();
         $record = $modelClassName::find($pk);
 
         return $record;
@@ -180,7 +180,9 @@ class BaseDaoEloquent extends BaseDao {
         if (empty($time))
             return null;
         $format = 'Y-m-d H:i:s';
-        $time = DateTime::createFromFormat($format, $time);
+        if ( !($time instanceof \DateTime)) {
+            $time = \DateTime::createFromFormat($format, $time);
+        }
         $time_str = $time->format('Y-m-d H:i:s');
 
         return $time_str;
@@ -195,7 +197,9 @@ class BaseDaoEloquent extends BaseDao {
         if (empty($time))
             return null;
         $format = 'Y-m-d H:i:s';
-        $time = DateTime::createFromFormat($format, $time);
+        if ( !($time instanceof \DateTime)) {
+            $time = \DateTime::createFromFormat($format, $time);
+        }
         $time_str = $time->format(DateTime::ISO8601);
 
         return $time_str;

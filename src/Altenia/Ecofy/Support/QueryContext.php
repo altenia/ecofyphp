@@ -13,7 +13,8 @@ class QueryContext {
 	public $qparams;         // The query parameters used for data query
 	public $boolop  = 'or';  // Wheter to conjunct (and) or disjunct (or) 
 
-	public function __construct($loadFromInput = true) {
+	public function __construct($loadFromInput = true)
+	{
 		if ($loadFromInput) {
 			$this->fromInput();	
 		}
@@ -50,7 +51,10 @@ class QueryContext {
 
 	}
 
-	// Loads Query parameters
+	/**
+	 * Loads all query string key value pairs into the qparam except for those
+	 * in which key starts with '_'
+	 */
 	private function loadQParams()
 	{
 		$this->qparams = array();

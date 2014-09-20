@@ -29,6 +29,12 @@ class GenericServiceController extends \BaseController {
 	protected $layout;
 
 	/**
+	 * Registry of response factories, which renders format other than HTML.
+	 * @type array
+	 */
+	protected $responseFactories = array();
+
+	/**
 	 * Constructor
 	 */
 	public function __construct($layoutName, $serviceInstanceName, $modelName, $modelNamePlural = null) {
@@ -59,10 +65,19 @@ class GenericServiceController extends \BaseController {
 
 		$listMethod = $this->indexRetrievalMethod . $this->modelNamePlural;
 		$records = $this->service->$listMethod($criteria, array(), $queryCtx->getOffset(), $queryCtx->limit);
-		$this->layout->content = \View::make($this->moduleName . '.index')
-			->with('queryCtx', $queryCtx)
-			->with('auxdata', $this->indexAuxData())
-		    ->with('records', $records);
+		if ($queryCtx->format === null || $queryCtx->format === 'html') {
+			$this->layout->content = \View::make($this->moduleName . '.index')
+				->with('queryCtx', $queryCtx)
+				->with('auxdata', $this->indexAuxData())
+			    ->with('records', $records);
+		} else {
+			$response = $this->_response('index', $queryCtx->format, $queryCtx, $records);
+			if ($response == null) {
+				\App::abort(404);
+				return;
+			}
+			return $response;
+		}
 	}
 
 	/**
@@ -189,6 +204,20 @@ class GenericServiceController extends \BaseController {
 	}
 
 	/**
+	 * returns response of a specific format
+	 */
+	protected function _response($action, $format, $queryCtx, &$records)
+	{
+		$rendName = $action . '/'. $format;
+		if (array_key_exists($rendName, $this->responseFactoryers))
+		{
+			$responseFactory = $this->responseFactories[$name . '/'. $format];
+			return $responseFactory->makeResponse($queryCtx, &$records)
+		}
+		return null;
+	}
+
+	/**
 	 * Method to return values that 
 	 * Overridable 
 	 */
@@ -252,4 +281,8 @@ class GenericServiceController extends \BaseController {
 
 	}
  
+ 	protected function registerResponseFactory($name, $factory)
+ 	{
+ 		$this->responseFactories[$name] = $factory;
+ 	}
 }

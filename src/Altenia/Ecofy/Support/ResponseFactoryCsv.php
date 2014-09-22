@@ -19,7 +19,7 @@ class ResponseFactoryCsv {
 	public function __construct($name, $fieldsToRender)
 	{
 		$this->name = $name;
-		$this->fieldsToRender = $fieldsToRender
+		$this->fieldsToRender = $fieldsToRender;
     }
 
 	/**
@@ -27,13 +27,19 @@ class ResponseFactoryCsv {
 	 */
 	public function makeResponse($queryCtx, &$records)
 	{
-		$csv_output = '';
+		$csv_output = $this->headerCsv($records);
+		$numFields = count($this->fieldsToRender);
 	    foreach ($records as $row) {
-	    	if ($fieldsToRender == null) {
+	    	if ($this->fieldsToRender == null) {
 	    		$csv_output .= implode(',', $row->toArray()) . "\n";
 	    	} else {
-	    		foreach ($fieldsToRender as $fieldName) {
-	    			$csv_output .= $row->$fieldName;
+
+	    		for ($i = 0; $i < $numFields; ++$i) {
+	    			$fieldName = $this->fieldsToRender[$i];
+	    			$csv_output .= '"' . $row->$fieldName . '"';
+	    			if ($i < $numFields - 1) {
+	    				$csv_output .= ',';
+	    			}
 	    		}
 	    		$csv_output .= "\n";
 	    	}
@@ -51,6 +57,17 @@ class ResponseFactoryCsv {
 	        'Content-Disposition' => 'attachment; filename="' . $filename . '"',
 	    );
 	 
-	    return Response::make($output, 200, $headers);
+	    return \Response::make($output, 200, $headers);
 	}
+
+	private function headerCsv(&$records)
+	{
+		$header = '';
+    	if ($this->fieldsToRender == null) {
+    		$header = implode(',', $records[0]->toArray()) . "\n";
+    	} else {
+    		$header = implode(',', $this->fieldsToRender) . "\n";
+    	}
+    	return $header;
+	} 
 }

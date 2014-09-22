@@ -19,8 +19,10 @@
                 {"name":"update_counter", "type":"integer"},
                 {"name":"lang", "type":"string", "length":3, "description":"Language"},
 
-                {"name":"id", "type":"string", "length":64 , "description":"ID"},
-                {"name":"user_sid", "type":"integer", "description":"Organization this user belongs to"},
+                {"name":"user_sid", "type":"integer", "description":"User"},
+                {"name":"id", "type":"string", "length":64, "description":"ID"},
+                {"name":"ref_id", "type":"string", "length":64, "description":"Reference ID. E.g. Registry ID where this record came from"},
+                {"name":"head_of_family", "type":"integer", "description":"Reference to the person that is the Head of the family"},
                 {"name":"primary_lang", "type":"string", "length":3, "is_nullable":true, "validation": "min:2|max:3", "description":"Primary language (s)he speaks"},
 
                 {"name":"education_level", "type":"string", "length":64, "is_nullable":true},
@@ -99,6 +101,8 @@
                 {"columns":["domain_id"]},
                 {"columns":["created_by"]},
                 {"columns":["id"], "type": "unique"},
+                {"columns":["user_sid"]},
+                {"columns":["ref_id"]},
                 {"columns":["email"], "type":"unique"},
                 {"columns":["permalink"], "type":"unique"}
             ]

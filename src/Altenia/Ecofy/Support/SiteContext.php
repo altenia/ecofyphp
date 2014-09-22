@@ -5,15 +5,22 @@
  */
 class SiteContext {
 
-	public static $name;
-	public static $slogan;
-	public static $description;
-	public static $copyright;
+	public $name;
+	public $slogan;
+	public $description;
+	public $copyright;
 
-	public static $default_lang;
+	public $default_lang;
 
-	public static $logo_url;
+	public $logo_url;
 
-	public static $base_path;
+	public $base_path;
 
+	private static $context = null;
+
+	public static function instance() {
+		if (self::$context == null)
+			self::$context = new SiteContext();
+		return self::$context;
+	}
 }

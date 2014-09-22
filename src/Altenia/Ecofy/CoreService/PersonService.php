@@ -26,7 +26,8 @@ class PersonService extends BaseDataService {
 	 */
 	public function listPersons($criteria, $sortParams = array(), $offset = 0, $limit=100)
 	{
-		return $this->dao->query($criteria, $sortParams, $offset, $limit);
+		//return $this->dao->query($criteria, $sortParams, $offset, $limit);
+		return $this->dao->queryByFamily($criteria, $sortParams, $offset, $limit);
 	}
 
 	/**
@@ -114,6 +115,17 @@ class PersonService extends BaseDataService {
         } else {
             throw new ValidationException($validator);
         }
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  object $model  A valid person model
+	 * @return mixed null if successful, validation if validation error
+	 */
+	public function updatePersonModel($model)
+	{
+        return $this->dao->update( $model );
 	}
 
 	/**

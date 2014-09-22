@@ -66,8 +66,8 @@ class UserService extends BaseDataService  {
         if (!array_key_exists('id', $data)) {
             $data['id'] = str_replace('@', '_', $data['email']);
         }
-        if (empty($data['display_name'])) {
-            $data['display_name'] = $data['first_name'] . ' ' . $data['last_name'];
+        if (empty($data['name'])) {
+            $data['name'] = $data['given_name'] . ' ' . $data['family_name'];
         }
 
         $validator = User::validator($data);
@@ -126,21 +126,27 @@ class UserService extends BaseDataService  {
         
         $validator = User::validator($data, false);
         if ($validator->passes()) {
-            $record = $this->findUserByPK($pk);
-            $record->fill($data);
-            $this->populateRoleName($record);
+            $model = $this->findUserByPK($pk);
+            $model->fill($data);
+            $this->populateRoleName($model);
 
-            if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
-                $record->last_session_ip = $_SERVER['HTTP_CLIENT_IP'];
-            }
             if (array_key_exists('password', $data)) {
-                $record->password = \Hash::make($data['password']);
+                $model->password = \Hash::make($data['password']);
             }
             
-            return $this->dao->update( $record );
+            return $this->updateUserModel($model);
         } else {
             throw new ValidationException($validator);
         }
+    }
+
+    public function updateUserModel($model)
+    {
+        if (array_key_exists('HTTP_CLIENT_IP', $_SERVER)) {
+            $model->last_session_ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+        
+        return $this->dao->update( $model );
     }
 
 

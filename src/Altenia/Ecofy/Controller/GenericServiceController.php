@@ -65,6 +65,7 @@ class GenericServiceController extends \BaseController {
 
 		$listMethod = $this->indexRetrievalMethod . $this->modelNamePlural;
 		$records = $this->service->$listMethod($criteria, array(), $queryCtx->getOffset(), $queryCtx->limit);
+
 		if ($queryCtx->format === null || $queryCtx->format === 'html') {
 			$this->layout->content = \View::make($this->moduleName . '.index')
 				->with('queryCtx', $queryCtx)
@@ -209,10 +210,10 @@ class GenericServiceController extends \BaseController {
 	protected function _response($action, $format, $queryCtx, &$records)
 	{
 		$rendName = $action . '/'. $format;
-		if (array_key_exists($rendName, $this->responseFactoryers))
+		if (array_key_exists($rendName, $this->responseFactories))
 		{
-			$responseFactory = $this->responseFactories[$name . '/'. $format];
-			return $responseFactory->makeResponse($queryCtx, &$records)
+			$responseFactory = $this->responseFactories[$rendName];
+			return $responseFactory->makeResponse($queryCtx, $records);
 		}
 		return null;
 	}

@@ -33,11 +33,16 @@ class QueryBuilderEloquent {
         			$compOp = array_keys($val)[0];
         			$compVal = array_values($val)[0];
 
-        			$this->handleCompOp($key, $compOp, $compVal, $query);
+        			$col = str_replace(':', '.', $key);
+        			$this->handleCompOp($col, $compOp, $compVal, $query);
 
         		} else {
         			if (!empty($val)) {
-        				$query->where($key, '=', $val);
+        				// PHP convers dot into underscor, therefore : is used
+        				// fo indicate alias.
+        				// convert : to . for SQL
+        				$col = str_replace(':', '.', $key);
+        				$query->where($col, '=', $val);
         			}
         		}
         	}

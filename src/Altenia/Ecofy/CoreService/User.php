@@ -38,7 +38,7 @@ class User extends Model implements UserInterface, RemindableInterface {
      *
      * @var array
      */
-    protected $fillable = array('created_dt','updated_dt','updated_counter','uuid','organization_sid','organization_name','id','password','role_sid','role_name','first_name','middle_name','last_name','lc_name','display_name','dob','phone','email','permalink','activation_code','security_question','security_answer','session_timestamp','last_session_ip','last_session_dt','login_fail_counter','active','status','default_lang_cd','timezone','expiry_dt','type','role_sid','params_text');
+    protected $fillable = array('created_dt','updated_dt','updated_counter','uuid','organization_sid','organization_name','id','password','role_sid','role_name','given_name','middle_name','family_name','name_lc','name','dob','phone','email','permalink','activation_code','security_question','security_answer','session_timestamp','last_session_ip','last_session_dt','login_fail_counter','active','status','default_lang_cd','timezone','expiry_dt','type','role_sid','params_text');
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -80,14 +80,14 @@ class User extends Model implements UserInterface, RemindableInterface {
 
     private static $validation_rules_create = array(
         'id' => 'required|min:4',
-        'password' => 'required|min:4',
-        'first_name' => 'required|min:2',
+        //'password' => 'required|min:4',
+        'given_name' => 'required|min:2',
         'email' => 'required|email'
         );
 
     private static $validation_rules_update = array(
         'id' => 'required|min:4',
-        'first_name' => 'required|min:2',
+        'given_name' => 'required|min:2',
         'email' => 'required|email'
         );
 

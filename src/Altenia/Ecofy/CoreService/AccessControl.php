@@ -91,13 +91,13 @@ class AccessControl extends Model {
 
     const FLAG_NONE = 0;
     const FLAG_READ = 1;
-    const FLAG_UDPATE = 2;
+    const FLAG_UPDATE = 2;
     const FLAG_CREATE = 4;
     const FLAG_DELETE = 8;
     const FLAG_ADMIN = 16;
 
     const FLAG_GREAD = 32;
-    const FLAG_GUDPATE = 64;
+    const FLAG_GUPDATE = 64;
     const FLAG_GCREATE = 128;
     const FLAG_GDELETE = 256;
     const FLAG_GADMIN = 512;
@@ -105,13 +105,13 @@ class AccessControl extends Model {
     public static function getPermissionsList($global = false) {
         $opt_permissions = array();
         $opt_permissions[FLAG_READ]   = 'read';
-        $opt_permissions[FLAG_UDPATE] = 'update';
+        $opt_permissions[FLAG_UPDATE] = 'update';
         $opt_permissions[FLAG_CREATE] = 'create';
         $opt_permissions[FLAG_DELETE] = 'delete';
         $opt_permissions[FLAG_ADMIN]  = 'admin';
         if ($global) {
             $opt_permissions[FLAG_GREAD]   = 'g read';
-            $opt_permissions[FLAG_GUDPATE] = 'g update';
+            $opt_permissions[FLAG_GUPDATE] = 'g update';
             $opt_permissions[FLAG_GCREATE] = 'g create';
             $opt_permissions[FLAG_GDELETE] = 'g delete';
             $opt_permissions[FLAG_GADMIN]  = 'g admin';

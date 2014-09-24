@@ -65,7 +65,7 @@ class UserProvider implements UserProviderInterface {
 	{
 		$user->setAttribute($user->getRememberTokenName(), $token);
 
-		$this->getUserService()->updateUser($user);
+		$this->getUserService()->updateUserModel($user);
 	}
 
 	/**

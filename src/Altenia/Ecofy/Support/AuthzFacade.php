@@ -3,6 +3,7 @@
 use Altenia\Ecofy\Util\StringUtil;
 use Altenia\Ecofy\Service\ServiceRegistry;
 use Altenia\Ecofy\CoreService\PredefinedAcl;
+use Altenia\Ecofy\CoreService\AccessControl;
 
 /**
  * Authorization (AccessControl) Facade
@@ -37,13 +38,19 @@ class AuthzFacade {
 	 */
 	public static function getAccessControl($user)
 	{
+		if (\Session::has('access_control')) {
+			$ac = \Session::get('access_control');
+			return $ac;
+		}
+
 		$ac = null;
 		if (!empty($user)) {
 		    if (!empty($user->type)) {
 		    	$ac = PredefinedAcl::get($user->type);
 		    } else if (self::getAccessControlService() != null && 
 				!empty($user->role_sid)
-				) {
+				)
+		    {
 				$criteria = array( 'role_sid' => $user->role_sid, 'service' => 'root' );
 		        $ac = self::getAccessControlService()->findAccessControl($criteria);
 		    }
@@ -52,7 +59,14 @@ class AuthzFacade {
     		$ac = PredefinedAcl::get('default');
     	}
 
+    	\Session::set('access_control', $ac);
+
 		return $ac;
+	}
+
+	public static function removeSession()
+	{
+		\Session::forget('access_control');
 	}
 
 	/**
@@ -140,20 +154,20 @@ class AuthzFacade {
 		// actionName sample: DocumentController@edit
 
 		if (StringUtil::startsWith($actionType, 'index'))
-			return \AccessControl::FLAG_READ;
+			return AccessControl::FLAG_READ;
 		if (StringUtil::startsWith($actionType, 'show'))
-			return \AccessControl::FLAG_READ;
+			return AccessControl::FLAG_READ;
 		if (StringUtil::startsWith($actionType, 'create'))
-			return \AccessControl::FLAG_CREATE;
+			return AccessControl::FLAG_CREATE;
 		if (StringUtil::startsWith($actionType, 'store'))
-			return \AccessControl::FLAG_CREATE;
+			return AccessControl::FLAG_CREATE;
 		if (StringUtil::startsWith($actionType, 'edit'))
-			return \AccessControl::FLAG_UDPATE;
+			return AccessControl::FLAG_UDPATE;
 		if (StringUtil::startsWith($actionType, 'update'))
-			return \AccessControl::FLAG_UDPATE;
+			return AccessControl::FLAG_UDPATE;
 		if (StringUtil::startsWith($actionType, 'destroy'))
-			return \AccessControl::FLAG_DELETE;
-		return \AccessControl::FLAG_READ;
+			return AccessControl::FLAG_DELETE;
+		return AccessControl::FLAG_READ;
 	}
 
 

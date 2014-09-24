@@ -17,7 +17,10 @@ class PersonDaoEloquent extends BaseDaoEloquent  {
     }
 
 
-    public function buildQuery($criteria)
+    /**
+     * Builds query with join to head_of_family
+     */
+    public function buildQuery2($criteria)
     {
         $modelClassName = $this->modelClassName();
         if (empty($criteria)) $criteria = array();
@@ -38,9 +41,15 @@ class PersonDaoEloquent extends BaseDaoEloquent  {
 
     public function queryByFamily($criteria, $sortParams = array(), $offset = 0, $limit=100)
     {
-    	$query = $this->buildQuery($criteria);
+    	$query = $this->buildQuery2($criteria);
         // @todo - orderBy()->get()
-        $records = $query->skip($offset)->take($limit)->orderBy('hof_person.name_lc', 'asc')->get();
+        $query = $query->skip($offset)->take($limit);
+        if (!empty($sortParams)) {
+            foreach($sortParams as $col => $direction ) {
+                $query->orderBy($col, $direction);
+            }
+        }
+        $records = $query->get();
 
         return $records;
     }

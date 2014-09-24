@@ -26,7 +26,20 @@ class PersonService extends BaseDataService {
 	 */
 	public function listPersons($criteria, $sortParams = array(), $offset = 0, $limit=100)
 	{
-		//return $this->dao->query($criteria, $sortParams, $offset, $limit);
+		return $this->dao->query($criteria, $sortParams, $offset, $limit);
+		//return $this->dao->queryByFamily($criteria, $sortParams, $offset, $limit);
+	}
+
+	/**
+	 * Returns list of the records.
+	 *
+	 * @param array $criteria     Parameters used for querying
+	 * @param int   $offset       The starting record
+	 * @param int   $limit        Maximum number of records to retrieve
+	 * @return Response
+	 */
+	public function listPersonsOrderByFamily($criteria, $sortParams = array(), $offset = 0, $limit=100)
+	{
 		return $this->dao->queryByFamily($criteria, $sortParams, $offset, $limit);
 	}
 

@@ -3,7 +3,7 @@
 /**
  * Helper class that provides HTML rendering functionalites.
  */
-class String {
+class StringUtil {
 
 	public static function startsWith($haystack, $needle)
 	{

@@ -33,6 +33,8 @@ class QueryBuilderEloquent {
         			$compOp = array_keys($val)[0];
         			$compVal = array_values($val)[0];
 
+        			// PHP does not support dot notation, 
+        			// therefore : is used e.g. persons:name-like
         			$col = str_replace(':', '.', $key);
         			$this->handleCompOp($col, $compOp, $compVal, $query);
 

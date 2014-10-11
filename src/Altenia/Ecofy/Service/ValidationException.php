@@ -5,10 +5,14 @@
  */
 class ValidationException extends ServiceException {
 
-	public function __construct($validator = null) 
+	/**
+	 * $object {MessageProviderInterface | array} object of MessageProviderInterface such as validator or an array of messages 
+	 */
+	public function __construct($object = null) 
 	{
+		// @todo - change argument from $validator to (array)$validation messages
 		// Should the first param be: (string)$validator->messages()->getMessages()
-		parent::__construct((string)$validator->messages(), ServiceException::CODE_VALIDATION, null, $validator);
+		parent::__construct('ValidationException', ServiceException::CODE_VALIDATION, null, $object);
     }
 
 }

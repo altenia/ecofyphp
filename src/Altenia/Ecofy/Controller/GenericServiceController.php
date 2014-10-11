@@ -63,8 +63,10 @@ class GenericServiceController extends \BaseController {
 		$queryCtx = new QueryContext(true);
 		$criteria = $queryCtx->buildCriteria();
 
-		$listMethod = $this->indexRetrievalMethod . $this->modelNamePlural;
-		$records = $this->service->$listMethod($criteria, array(), $queryCtx->getOffset(), $queryCtx->limit);
+		$listMethod = $this->listMethod();
+
+		$sortParams = $this->sortParams();
+		$records = $this->service->$listMethod($criteria, $sortParams, $queryCtx->getOffset(), $queryCtx->limit);
 
 		if ($queryCtx->format === null || $queryCtx->format === 'html') {
 			$this->layout->content = \View::make($this->moduleName . '.index')
@@ -106,7 +108,9 @@ class GenericServiceController extends \BaseController {
 
 		try {
 			$createMethod = 'create' . $this->modelName;
+			$this->beforeRecordCreate($data);
             $record = $this->service->$createMethod($data);
+            $this->afterRecordCreate($record);
             \Session::flash('message', 'Successfully created!');
             
             return $this->redirectAfterPost(
@@ -130,6 +134,11 @@ class GenericServiceController extends \BaseController {
 	{
 		$findMethod = 'find' . $this->modelName . 'ByPK';
 		$record = $this->service->$findMethod($id);
+
+		if ( empty($record )) {
+			\App::abort(404);
+				return;
+		}
 
 		$this->addBreadcrumb([$record->getName(), \Request::url()]);
 		$this->setContentTitle(\Lang::get($this->moduleName . '._name') . ' - ' .  $record->getName());
@@ -171,7 +180,9 @@ class GenericServiceController extends \BaseController {
 		
 		try {
 			$updateMethod = 'update' . $this->modelName;
+			$this->beforeRecordUpdate($data);
             $record = $this->service->$updateMethod($id, $data);
+            $this->afterRecordUpdate($record);
             \Session::flash('message', 'Successfully updated!');
 
             return $this->redirectAfterPost(
@@ -219,6 +230,20 @@ class GenericServiceController extends \BaseController {
 	}
 
 	/**
+	 * The service method name to list on index
+	 */
+	protected function listMethod() {
+		return $this->indexRetrievalMethod . $this->modelNamePlural;
+	}
+
+	/**
+	 * Sort param
+	 */
+	protected function sortParams() {
+		return array();
+	}
+
+	/**
 	 * Method to return values that 
 	 * Overridable 
 	 */
@@ -238,7 +263,7 @@ class GenericServiceController extends \BaseController {
 	 * Method to return values that 
 	 * Overridable 
 	 */
-	protected function showAuxData($record) {
+	protected function showAuxData(&$record) {
 		return null;
 	}
 
@@ -246,7 +271,7 @@ class GenericServiceController extends \BaseController {
 	 * Method to return values that 
 	 * Overridable 
 	 */
-	protected function editAuxData($record) {
+	protected function editAuxData(&$record) {
 		return null;
 	}
 
@@ -282,6 +307,9 @@ class GenericServiceController extends \BaseController {
 
 	}
  
+ 	/**
+ 	 * Registers a new reponse factory
+ 	 */
  	protected function registerResponseFactory($name, $factory)
  	{
  		$this->responseFactories[$name] = $factory;

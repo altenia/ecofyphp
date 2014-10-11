@@ -79,6 +79,12 @@ class PersonService extends BaseDataService {
 	 */
 	public function createPerson($data)
 	{
+		// remove empty email from the entry to avoid duplicate '' emails
+        if ( array_key_exists('email', $data) ) {
+        	if (empty($data['email'])) {
+        		unset($data['email']);
+        	}
+        }
 		$validator = Person::validator($data);
         if ($validator->passes()) {
             $record = new Person();
@@ -121,7 +127,7 @@ class PersonService extends BaseDataService {
 	 */
 	public function updatePerson($pk, $data)
 	{
-		$validator = Person::validator($data);
+		$validator = Person::validator($data, false);
         if ($validator->passes()) {
             
             return $this->dao->updateFields( $pk, $data );

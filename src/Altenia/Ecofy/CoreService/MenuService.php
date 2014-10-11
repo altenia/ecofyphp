@@ -51,7 +51,7 @@ class MenuService extends BaseService {
             $menu_admin = array();
             foreach ($serviceRegistry->getAll() as $serviceInfo) {
                 if ( !($serviceInfo->reference instanceof MenuService) ) {
-                    if ($ac->check(AccessControl::FLAG_READ, 'svc:' . $serviceInfo->reference->getId())) {
+                    if ($ac->check(AccessControl::FLAG_LIST | AccessControl::FLAG_ADMIN , 'svc:' . $serviceInfo->reference->getId())) {
                         $menu_admin[] = self::createMenuItem($serviceInfo->title, $serviceInfo->url, $serviceInfo->icon);    
                     }
                 }
@@ -64,7 +64,7 @@ class MenuService extends BaseService {
 
         } else {
 
-            $menus['workspace'][] = self::createMenuItem(\Lang::get('site.signin'), \URL::to('auth/signin' ) );
+            $menus['workspace'][] = self::createMenuItem(\Lang::get('site.signin'), \URL::to('personauth/signin' ) );
         }
 
         return $menus;

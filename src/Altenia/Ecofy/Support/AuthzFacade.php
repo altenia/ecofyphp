@@ -11,6 +11,37 @@ use Altenia\Ecofy\CoreService\AccessControl;
 class AuthzFacade {
 
 	private static $accessControlService = null;
+
+	/**
+	 * Wrapper around Auth 
+	 */
+	public static function logout() {
+		\Auth::logout();
+		AuthzFacade::removeSession();
+	}
+
+	/**
+	 * Wrapper around Auth 
+	 */
+	public static function attempt($attempt_input) {
+		$attempResult = \Auth::attempt($attempt_input);
+		if ($attempResult) {
+			AuthzFacade::removeSession();
+		}
+		return $attempResult;
+	}
+
+	/**
+	 * Wrapper around Auth 
+	 */
+	public static function login($user) {
+		$loginResult = \Auth::login($user);
+		if (\Auth::check()) {
+			AuthzFacade::removeSession();
+		}
+		return $loginResult;
+		
+	}
 		
 	public static function getAccessControlService() {
 		if (self::$accessControlService == null) {
@@ -154,7 +185,7 @@ class AuthzFacade {
 		// actionName sample: DocumentController@edit
 
 		if (StringUtil::startsWith($actionType, 'index'))
-			return AccessControl::FLAG_READ;
+			return AccessControl::FLAG_LIST;
 		if (StringUtil::startsWith($actionType, 'show'))
 			return AccessControl::FLAG_READ;
 		if (StringUtil::startsWith($actionType, 'create'))
@@ -162,9 +193,9 @@ class AuthzFacade {
 		if (StringUtil::startsWith($actionType, 'store'))
 			return AccessControl::FLAG_CREATE;
 		if (StringUtil::startsWith($actionType, 'edit'))
-			return AccessControl::FLAG_UDPATE;
+			return AccessControl::FLAG_UPDATE;
 		if (StringUtil::startsWith($actionType, 'update'))
-			return AccessControl::FLAG_UDPATE;
+			return AccessControl::FLAG_UPDATE;
 		if (StringUtil::startsWith($actionType, 'destroy'))
 			return AccessControl::FLAG_DELETE;
 		return AccessControl::FLAG_READ;

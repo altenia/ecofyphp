@@ -103,5 +103,15 @@ class ServiceRegistry {
         return null;
     }
 
+    /**
+     * Returns the service object (reference) given the id
+     */
+    public function getServiceObject($serviceId)
+    {
+        $svcEntry = self::instance()->findById($serviceId);
+        $svcObject = $svcEntry != null ? $svcEntry->reference : null;
+        return $svcObject;
+    }
+
 
 }

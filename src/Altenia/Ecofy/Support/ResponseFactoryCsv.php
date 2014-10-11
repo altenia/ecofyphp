@@ -30,13 +30,21 @@ class ResponseFactoryCsv {
 		$csv_output = $this->headerCsv($records);
 		$numFields = count($this->fieldsToRender);
 	    foreach ($records as $row) {
+	    	// if fields not specified, return all fields
 	    	if ($this->fieldsToRender == null) {
 	    		$csv_output .= implode(',', $row->toArray()) . "\n";
 	    	} else {
 
 	    		for ($i = 0; $i < $numFields; ++$i) {
 	    			$fieldName = $this->fieldsToRender[$i];
-	    			$csv_output .= '"' . $row->$fieldName . '"';
+	    			$fieldVal = '';
+	    			if (\Altenia\Ecofy\Util\StringUtil::endsWith($fieldName, '()')) {
+	    				$methodName = substr($fieldName, 0, -2);
+		    			$fieldVal = $row->$methodName();
+		    		} else {
+		    			$fieldVal = $row->$fieldName;
+		    		}
+	    			$csv_output .= '"' . $fieldVal . '"';
 	    			if ($i < $numFields - 1) {
 	    				$csv_output .= ',';
 	    			}

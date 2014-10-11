@@ -36,7 +36,13 @@ class BaseDaoEloquent extends BaseDao {
     {
         $query = $this->buildQuery($criteria);
         // @todo - orderBy()->get()
-        $records = $query->skip($offset)->take($limit)->get();
+        $records = $query->skip($offset)->take($limit);
+        if (!empty($sortParams)) {
+            foreach($sortParams as $col => $direction ) {
+                $query->orderBy($col, $direction);
+            }
+        }
+        $records = $query->get();
 
         return $records;
     }
@@ -129,8 +135,12 @@ class BaseDaoEloquent extends BaseDao {
      */
     public function update($record)
     {
-        $record->updated_dt = $this->toDbDateTime();
+        $record->updated_dt = $this->toDbDateTime(new \DateTime);
         $record->update_counter++;
+        if (\Auth::check()) {
+            \Auth::user();
+            $record->updated_by = \Auth::user()->sid;
+        }
 
         $this->beforeUpdate($record);
 

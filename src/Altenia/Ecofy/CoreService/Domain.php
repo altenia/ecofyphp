@@ -37,7 +37,7 @@ class Domain extends Model {
 	 *
 	 * @var array
 	 */
-    protected $fillable = array('creator_sid','created_dt','updated_by','updated_dt','update_counter','uuid','lang','owner_sid','parent_sid','category_sid','id','name','name_lc','intro','description','logo_image_url','cover_image_url','policy','privacy_level','type','active','status','num_users','num_organizations','params_text');
+    protected $fillable = array('creator_sid','created_dt','updated_by','updated_dt','update_counter','uuid','lang','owner_sid','parent_sid','category_sid','id','name','name_nl','intro','description','logo_image_url','cover_image_url','policy','privacy_level','type','active','status','num_users','num_organizations','params_text');
 
     /**
      * Validation rules for creation

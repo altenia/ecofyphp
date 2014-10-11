@@ -59,7 +59,7 @@ class UserService extends BaseDataService  {
      * Mostly wrapper around insert with pre and post processing.
      *
      * @param array $data  Parameters used for creating a new record
-     * @return mixed  null if successful, validation object validation fails
+     * @return mixed  the newly inserted model, null if failed
      */
     public function createUser($data)
     {
@@ -123,10 +123,22 @@ class UserService extends BaseDataService  {
      */
     public function updateUser($pk, $data)
     {
-        
+
         $validator = User::validator($data, false);
         if ($validator->passes()) {
+
             $model = $this->findUserByPK($pk);
+            if (array_key_exists('id', $data)) {
+                // Check that id is not in use
+                $idCriteria = array('id' => $data['id']); 
+                $matchingUser = $this->findUser($idCriteria);
+                if (!empty($matchingUser) && $matchingUser->sid !== $model->sid) {
+                    $validator = array('id' => 'ID already in use');
+                    throw new ValidationException($validator);
+                }
+            }
+
+
             $model->fill($data);
             $this->populateRoleName($model);
 

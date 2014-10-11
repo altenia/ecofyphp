@@ -33,6 +33,7 @@ class PersonDaoEloquent extends BaseDaoEloquent  {
         $query = $queryBuilder->buildQuery($criteria, $query);
         // This is required because the table is joined to the same table
         $cols = $model->getFillable();
+        array_unshift($cols, 'sid', 'uuid', 'domain_sid', 'domain_id', 'created_by', 'created_dt', 'updated_by', 'updated_dt', 'update_counter', 'lang');
         $aliasedCols = array_map(function($val){
         	return 'persons.' . $val;
         }, $cols);

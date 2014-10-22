@@ -11,7 +11,8 @@ class CsvUtilTest extends PHPUnit_Framework_TestCase {
 
 		$result = Altenia\Ecofy\Util\CsvUtil::toAssociativeArray($data);
 
-		print_r($result);
+		$this->assertEquals(20, count($result));
+		//print_r($result);
         
 	}
 

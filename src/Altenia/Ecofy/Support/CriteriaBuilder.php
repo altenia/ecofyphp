@@ -42,7 +42,8 @@ class CriteriaBuilder {
 	            	$criteria[$colname] = $queryVal;
 	            } else {
 	            	$op = array_key_exists($operator, static::$op_map) ? static::$op_map[$operator] : '$' . $operator;
-	            	$criteria[$colname] = array($op => $queryVal);;
+	            	//$criteria[$colname] = array($op => $queryVal);
+	            	$criteria[$colname][$op] = $queryVal;
 	            }
 	        }
 		}

@@ -11,7 +11,7 @@ class EntityDaoMongo extends BaseDaoMongo  {
     /**
      * Constructor
      */
-    public function __construct($collectionName = 'organization')
+    public function __construct($collectionName = 'entity')
     {
         parent::__construct('Altenia\Ecofy\CoreService\Entity', $collectionName);
     }

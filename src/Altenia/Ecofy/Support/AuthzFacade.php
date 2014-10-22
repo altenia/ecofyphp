@@ -2,8 +2,8 @@
 
 use Altenia\Ecofy\Util\StringUtil;
 use Altenia\Ecofy\Service\ServiceRegistry;
-use Altenia\Ecofy\CoreService\PredefinedAcl;
-use Altenia\Ecofy\CoreService\AccessControl;
+use Altenia\Ecofy\Module\Security\PredefinedAcl;
+use Altenia\Ecofy\Module\Security\AccessControl;
 
 /**
  * Authorization (AccessControl) Facade
@@ -148,10 +148,16 @@ class AuthzFacade {
 		// 3.1. The resource string is "svc:<container_svc_root>/item:<param[0]>[/svc:<conatiner_service>]"
 		// 4. If no such service exists, just use the service name as-is with /<param-key>:<param-val>. 
 		$resource = '';
-		// Remove 'Controller' suffix
-		$serviceName = substr($controllerName, 0,  - 10); 
+		$slashPos = strrpos($controllerName, '\\');
+		if ($slashPos === false) 
+			$slashPos = 0;
+		else 
+			++$slashPos; 
+		// Remove namespaces and 'Controller' suffix
+		$serviceName = substr($controllerName, $slashPos,  - 10); 
+
 		if (StringUtil::endsWith($serviceName, 'Api')) {
-			// Remove 'Api'
+			// Remove 'Api' Suffix
 			$serviceName = substr($serviceName, 0,  - 3); 
 		}
 		$serviceName = snake_case($serviceName);

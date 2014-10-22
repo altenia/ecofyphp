@@ -49,7 +49,6 @@ class QueryBuilderEloquent {
         		}
         	}
         }
-        //die();
         return $query;
 	}
 

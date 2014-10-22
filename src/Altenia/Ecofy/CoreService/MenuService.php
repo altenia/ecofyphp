@@ -4,6 +4,8 @@ use Altenia\Ecofy\Service\BaseService;
 use Altenia\Ecofy\Service\ServiceRegistry;
 use Altenia\Ecofy\Support\AuthzFacade;
 
+use Altenia\Ecofy\Module\Security\AccessControl;
+
 /**
  * Service class that provides business logic for category
  */

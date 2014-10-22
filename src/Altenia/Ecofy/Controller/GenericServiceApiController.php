@@ -150,9 +150,9 @@ class GenericServiceApiController extends \BaseController {
 		$result = $this->service->$deleteMethod($id);
 
 		if (!empty($result)) {
-			Log::debug('Removing ' . $this->modelName . ': ' . $result->getName());
+			\Log::debug('Removing ' . $this->modelName . ': ' . $result->getName());
 		} else {
-			Log::info($this->modelName .' record ' . $id . ' not found');
+			\Log::info($this->modelName .' record ' . $id . ' not found');
 		}
 
 		if (!empty($result)) {

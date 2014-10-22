@@ -29,19 +29,19 @@ class BaseController extends Controller {
 	{
 		if ( ! is_null($this->layout))
 		{
-			$this->layout = View::make($this->layout);
+			$this->layout = \View::make($this->layout);
 		}
 	}
 
 	protected function setContentTitle($title)
 	{
-		View::share('content_header', $title);
+		\View::share('content_header', $title);
 	}
 
 	protected function addBreadcrumb($breadcrumbItem)
 	{
 		$this->breadcrumb[] = $breadcrumbItem;
-		View::share('breadcrumb', $this->breadcrumb);
+		\View::share('breadcrumb', $this->breadcrumb);
 	}
 
 
@@ -61,12 +61,18 @@ class BaseController extends Controller {
         	}
 
         }
-        return Redirect::to($return_url);
+        return \Redirect::to($return_url);
 	}
 
 	protected function toJson($arr, $option = JSON_PRETTY_PRINT)
 	{
 		return json_encode($arr, $option);
+	}
+
+
+	protected function getService($serviceName)
+	{
+		return \App::make('svc:' . $serviceName);
 	}
 
 	///////// Filters
@@ -76,6 +82,6 @@ class BaseController extends Controller {
      */
     public function setBredcrumbFilter($route, $request)
     {
-        View::share('breadcrumb', $this->breadcrumb);
+        \View::share('breadcrumb', $this->breadcrumb);
     }
 }

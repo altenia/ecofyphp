@@ -16,13 +16,13 @@ use Altenia\Ecofy\Support\ResponseFactoryCsv;
 class PersonController extends GenericServiceController {
 
 	public static $statuses = ['imported' => 'imported'
-			, 'registered' => 'registered', 'verified' => 'verified'
+			, 'incomplete' => 'incomplete', 'registered' => 'registered', 'verified' => 'verified'
 			, 'departed' => 'departed'];
 
 	public function __construct()
 	{
 		parent::__construct('layouts.workspace', 'svc:person', 'Person');
-		$colsToExport = ['status', 'id', 'isHeadOfFamily()', 'name_nl', 'getFullName2()', 'alternate_name'
+		$colsToExport = ['status', 'id', 'isHeadOfFamily()', 'getHeadOfFamilyName()', 'name_nl', 'getFullName2()', 'alternate_name'
 			, 'affiliation', 'getFullAddress()', 'mobile_number', 'telephone', 'email'];
 		$this->registerResponseFactory('index/csv'
 				, new ResponseFactoryCsv('person', $colsToExport)

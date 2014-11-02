@@ -1,0 +1,84 @@
+<?php
+
+  function renderMenu($menu, $active) {
+    $html_out = '<ul class="nav nav-sidebar">';
+    $html_out .=renderMenuR($menu, $active, '');
+    $html_out .= '</ul>';
+    return $html_out;
+  }
+
+  /**
+   * $path - array of menu path
+   */
+  function renderMenuR($menu, $active_path, $curr_path)
+  {
+    $html_out = '';
+    foreach($menu as $sub_menu) {
+      if (is_array($sub_menu[1])) // is a menu node
+      {
+        $html_out .= '<li><a name="#' . $sub_menu[0] . '">' . $sub_menu[0] . '</a>';
+        $html_out .= '<ul>';
+        $html_out .= renderMenuR($sub_menu[1], $active_path, $curr_path . '/' . $sub_menu[0]);
+        $html_out .= '</ul>';
+      }
+      else 
+      {
+        $active_attr = '';
+        if ($curr_path . '/' . $sub_menu[0] == $active_path) {
+          $active_attr = 'class="active"';
+        }
+        $html_out .= '<li ' . $active_attr . '><a href="' . $sub_menu[1] . '">' . $sub_menu[0] . '</a></li>';
+      }
+    }
+    return $html_out;
+  }
+?>
+          <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne"><span class="glyphicon glyphicon-cog"></span> Admin</a>
+                </h4>
+              </div>
+              <div id="collapseOne" class="panel-collapse collapse in">
+                <ul class="list-group">
+                  <li class="list-group-item"><span class="glyphicon glyphicon-briefcase"></span><a href="/organizations"> Organizations</a></li>
+                  <li class="list-group-item"><span class="glyphicon glyphicon-user"></span><a href="/users"> Users</a></li>
+                  <li class="list-group-item"><span class="glyphicon glyphicon-folder-open"></span><a href="/document_types"> Document Types</a></li>
+
+                  <!--<li class="list-group-item"><span class="glyphicon glyphicon-flash"></span><a href="#"> Workflow</a></li>-->
+
+                </ul>
+              </div>
+            </div>
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour"><span class="glyphicon glyphicon-file">
+                    </span>Documents</a>
+                </h4>
+              </div>
+              <div id="collapseFour" class="panel-collapse collapse">
+                <div class="list-group">
+                  <a href="/document_types/~another_type/documents" class="list-group-item">FAL-2</a>
+                  <a href="#" class="list-group-item active">FAL-2</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h4 class="panel-title">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive"><span class="glyphicon glyphicon-heart">
+                    </span>Favorites</a>
+                </h4>
+              </div>
+              <div id="collapseFive" class="panel-collapse collapse">
+                <div class="list-group">
+                  <a href="/document_types/~another_type/documents" class="list-group-item">[Fal-6] Doc1234</a>
+                  <a href="/page/fal" class="list-group-item">Document Sample</a>
+                </div>
+              </div>
+            </div>
+          </div>

@@ -54,9 +54,9 @@ class Domain extends Model {
      *
      * @var array
      */
-    private static $validation_rules_udpate = array(
-        'id' => 'required|alpha_dash|min:6',
-		'name' => 'required|alpha_dash|min:4'
+    private static $validation_rules_update = array(
+        'id' => 'alpha_dash|min:6',
+		'name' => 'alpha_dash|min:4'
     	);
 
     /**

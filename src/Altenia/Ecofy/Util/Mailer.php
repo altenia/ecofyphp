@@ -110,7 +110,7 @@ class Mailer {
      *
      * @return the number of email 
      */
-    public function sendBulkTemplateMail($sender, $recipientsKey, $contexts, $subjectTemplate, $bodyTemplate, $delay = 2)
+    public function sendBulkTemplateMail($sender, $recipientsKey, $contexts, $subjectTemplate, $bodyTemplate, $delay = 3)
     {
     	$failures = array();
     	$errors = array();
@@ -119,7 +119,7 @@ class Mailer {
     	$idx = 0;
     	foreach ($contexts as $context) {
     		++$idx;
-	    	if (array_key_exists($recipientsKey, $context) && !empty($context[$recipientsKey])) {
+	    	if (!empty($context[$recipientsKey])) {
 		    	$recipients = $context[$recipientsKey];
                 if (!is_array($recipients)) {
                     $recipients = array($recipients);
@@ -132,7 +132,7 @@ class Mailer {
                 }
 		    	sleep($delay);
 		    } else {
-		    	$errors[] = 'Context[' . $idx . '] does not contain reciepients';
+		    	$errors[] = 'Context[' . $idx . '] does not contain recipients';
 		    }
 	    }
 

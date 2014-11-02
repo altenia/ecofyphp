@@ -105,7 +105,7 @@ class MailerService extends BaseService {
                 }
 		    	sleep($delay);
 		    } else {
-		    	$errors[] = 'Context[' . $idx . '] does not contain reciepients';
+		    	$errors[] = 'Context[' . $idx . '] does not contain recipients';
 		    }
 	    }
 

@@ -1,0 +1,64 @@
+{
+    "schema-name": "ecofy",
+    "version": 0.1,
+    "date": "2014-07-32",
+    "description": "Database schema for Ecofy system",
+
+    "entities": {
+        "task_log_entry": {
+            "plural": "task_log_entries",
+            "fields":[
+                {"name":"sid", "type":"auto", "is_nullable": false},
+                {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
+                {"name":"domain_sid", "type":"long", "is_nullable": true},
+                {"name":"domain_id", "type":"string", "length":64},
+                {"name":"owner_sid", "type":"long"},
+                {"name":"created_by", "type":"long"},
+                {"name":"created_dt", "type":"datetime"},
+                {"name":"updated_by", "type":"long"},
+                {"name":"updated_dt", "type":"datetime"},
+                {"name":"update_counter", "type":"integer"},
+                {"name":"lang", "type":"string", "length":3, "description":"Language"},
+
+                {"name":"task_sid", "type":"long", "is_nullable": true, "description": "The parent organization"},
+
+                {"name":"name", "type":"string", "length":256, "validation": "required|min:4"},
+                {"name":"category_sid", "type":"long", "description": "The organization category"},
+                {"name":"details", "type":"text"},
+                {"name":"reference", "type":"string", "length":256},
+
+                {"name":"priority", "type":"int", "description": "Priority within the timeframe for the display order"},
+                {"name":"allocation_date", "type":"datetime", "description": "date (today) that was allocated"},
+                {"name":"planned_duration", "type":"int", "description": "Planned (expected) duration in hours"},
+
+                {"name":"actual_duration", "type":"int", "description": "Actual duration"},
+                {"name":"actual_start_dt", "type":"datetime", "description": "Actual start time"},
+                {"name":"actual_end_dt", "type":"datetime", "description": "Actual end time"},
+
+                {"name":"status", "type":"int", "default": "0", "description": "0-notcarriedout, 1-carriedout"},
+                {"name":"status_reason", "type":"string", "length":127, "description": "Reason the allocated was not carried out: deprioritized, no longer needed, other"},
+                {"name":"params_text", "type":"text", "is_nullable": true}
+            ],
+            "indexes":[
+                {"columns":["uuid"]},
+                {"columns":["domain_id"]},
+                {"columns":["created_by"]},
+                {"columns":["task_sid"]},
+                {"columns":["name"]},
+                {"columns":["category_sid"]},
+                {"columns":["allocation_date"]},
+                {"columns":["actual_start_dt"]},
+                {"columns":["status"]}
+            ],
+            "constraints":[
+                {"kind":"foreign", "key":"owner_sid", "reference":"sid", "on": "user"},
+                {"kind":"foreign", "key":"task_sid", "reference":"sid", "on": "task"},
+                {"kind":"foreign", "key":"category_sid", "reference":"sid", "on": "category"}
+            ],
+            "relations":[
+                {"kind":"has_one", "property":"task", "entity":"task", "foreign_key":"sid"}
+            ]
+        }
+
+    }
+}

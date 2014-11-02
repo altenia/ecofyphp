@@ -30,18 +30,25 @@ class QueryBuilderEloquent {
         		$this->handleLogicOp($key, $val, $query);
         	} else {
         		if (is_array($val)) {
-        			$compOp = array_keys($val)[0];
-        			$compVal = array_values($val)[0];
+        			/* Same column, multiple statements:
+        			 [ 
+        			 	"time" => ["gt" => "10-10-01", "gt" => "10-10-01"] 
+        			 ]
+        			*/
+        			foreach($val as $compOp => $compVal) {
+	        			//$compOp = array_keys($val)[0];
+	        			//$compVal = array_values($val)[0];
 
-        			// PHP does not support dot notation, 
-        			// therefore : is used e.g. persons:name-like
-        			$col = str_replace(':', '.', $key);
-        			$this->handleCompOp($col, $compOp, $compVal, $query);
-
+	    				// PHP converts dot into underscore, therefore : is used
+	    				// to indicate alias.
+	    				// convert : to . for SQL
+	        			$col = str_replace(':', '.', $key);
+	        			$this->handleCompOp($col, $compOp, $compVal, $query);
+        			}
         		} else {
         			if (!empty($val)) {
-        				// PHP convers dot into underscor, therefore : is used
-        				// fo indicate alias.
+        				// PHP converts dot into underscore, therefore : is used
+        				// to indicate alias.
         				// convert : to . for SQL
         				$col = str_replace(':', '.', $key);
         				$query->where($col, '=', $val);

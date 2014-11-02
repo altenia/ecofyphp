@@ -10,7 +10,7 @@ class QueryContext {
 	public $page    = null;  // The current page
 	public $offset  = null;  // Alternative to page: an offset
 	public $limit   = 20;    // Maximum number of entries to return
-	public $qparams;         // The query parameters used for data query
+	public $qparams = array();         // The query parameters used for data query
 	public $boolop  = 'or';  // Wheter to conjunct (and) or disjunct (or) 
 
 	public function __construct($loadFromInput = true)

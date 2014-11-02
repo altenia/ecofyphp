@@ -114,6 +114,11 @@ class User extends Model implements UserInterface, RemindableInterface {
         return $this->getFullName();
     }
 
+    public function getAttributes()
+    {
+        return json_decode($this->params_text, true);
+    }
+
     public function getOrgProperty($property, $default = null)
     {
         $org = $this->organization;

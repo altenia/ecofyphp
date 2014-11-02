@@ -52,7 +52,7 @@ class FileService extends BaseService {
 				// Will be set to something like: 'users/1_myprofile.jpg'
 				//$model->$filePropName = $subPath . $filename;
 
-				print_r($destinationPath . ' : ' . $filename);
+//print_r($destinationPath . ' : ' . $filename);
 				$uploadSuccess = $uploadedFile->move($destinationPath, $filename);
 
 				if ($uploadSuccess) {

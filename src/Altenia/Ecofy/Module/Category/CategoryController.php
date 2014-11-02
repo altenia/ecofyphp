@@ -18,7 +18,7 @@ class CategoryController extends GenericServiceController {
 
 
 	public function showAuxData(&$record) {
-
+		$auxdata = array();
 		return $auxdata;
 	}
 }

@@ -53,7 +53,7 @@ class Comment extends Model {
      *
      * @var array
      */
-    private static $validation_rules_udpate = array(
+    private static $validation_rules_update = array(
         
     	);
 

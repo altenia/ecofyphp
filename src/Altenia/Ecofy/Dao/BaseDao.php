@@ -1,5 +1,6 @@
 <?php namespace Altenia\Ecofy\Dao;
 
+use Altenia\Ecofy\Dao\Schema\Schema;
 use Altenia\Ecofy\Util\UuidUtil;
 
 /**
@@ -9,9 +10,22 @@ abstract class BaseDao {
 
 	protected $modelFqn;
 
+    protected $schema;
+
 	public function __construct($modelFqn)
     {
     	$this->modelFqn = $modelFqn;
+        $this->schema = new Schema;
+    }
+
+    public function setSchema($schema)
+    {
+        $this->schema = $schema;
+    }
+
+    public function getSchema()
+    {
+        return $this->schema;
     }
 
     /**
@@ -35,9 +49,20 @@ abstract class BaseDao {
 
     // Template method called prior insertion
     public function beforeInsert(&$record)
-    {}
+    {
+        // Make proper conversion of value representation, e.g. ISO date to MySQL's
+        /* Seems like Laravel getDates() already provide this functianality
+        $fields = $this->schema->getFields();
+        foreach ($fields as $fieldName => $dataType) {
+            if ($dataType->getName() === 'DateTime') {
+                if (isset($record->$fieldName)) {
+                    $record->$fieldName = $this->toDbDateTime($record->$fieldName)
+                }
+            }
+        }*/
+    }
 
-    // Tempalte method called prio update
+    // Template method called prior update
     public function beforeUpdate(&$record)
     {}
 
@@ -102,4 +127,9 @@ abstract class BaseDao {
      * @return Object the object that was deleted, null if not found
      */
     abstract public function delete($pk);
+
+    /**
+     * @param $date Either null or string in iso format
+     */
+    abstract public function toDbDateTime($time);
 }

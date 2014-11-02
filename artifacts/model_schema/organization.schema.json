@@ -5,13 +5,14 @@
     "description": "Database schema for Ecofy system",
 
     "entities": {
-        "entity": {
-            "plural": "entities",
+        "organization": {
+            "plural": "organizations",
             "fields":[
                 {"name":"sid", "type":"auto", "is_nullable": false},
                 {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
                 {"name":"domain_sid", "type":"long", "is_nullable": true},
                 {"name":"domain_id", "type":"string", "length":64},
+                {"name":"owner_sid", "type":"long"},
                 {"name":"created_by", "type":"long"},
                 {"name":"created_dt", "type":"datetime"},
                 {"name":"updated_by", "type":"long"},
@@ -20,14 +21,14 @@
                 {"name":"lang", "type":"string", "length":3, "description":"Language"},
 
                 {"name":"owner_sid", "type":"long", "is_nullable": false},
-                {"name":"parent_sid", "type":"long", "is_nullable": true, "description": "The parent entity"},
+                {"name":"parent_sid", "type":"long", "is_nullable": true, "description": "The parent organization"},
                 {"name":"role_sid", "type":"long", "description": "Role"},
                 {"name":"role_name", "type":"string", "length":128, "description": "Role name"},
 
                 {"name":"id", "type":"string", "length":128, "validation": "required|alpha_dash|min:4"},
                 {"name":"name", "type":"string", "length":128, "validation": "required|alpha_dash|min:4"},
                 {"name":"name_lc", "type":"string", "length":128, "is_nullable": true},
-                {"name":"category_sid", "type":"long", "description": "The entity category"},
+                {"name":"category_sid", "type":"long", "description": "The organization category"},
                 {"name":"registration_type", "type":"string", "length":64, "description": "Legal registration type"},
                 {"name":"registration_num", "type":"string", "length":128, "description": "Unique legal registration number"},
                 {"name":"inet_domain_name", "type":"string", "length":64, "is_nullable": true},
@@ -44,7 +45,7 @@
                 {"name":"description", "type":"text"},
                 {"name":"logo_image_uri", "type":"string", "length":255, "is_nullable": true},
                 {"name":"cover_image_uri", "type":"string", "length":255, "is_nullable": true},
-                {"name":"found_date", "type":"string", "is_nullable": true, "length":6, "description": "date that the entity was founded"},
+                {"name":"found_date", "type":"string", "is_nullable": true, "length":6, "description": "date that the organization was founded"},
 
                 {"name":"status", "type":"int", "default": "0", "description": "0-pending confirm, 1-confirmed"},
                 {"name":"num_members", "type":"integer", "default":0},
@@ -65,7 +66,7 @@
                 {"columns":["status"]}
             ],
             "constraints":[
-                {"kind":"foreign", "key":"owner_sid", "reference":"sid", "on": "users"},
+                {"kind":"foreign", "key":"owner_sid", "reference":"sid", "on": "user"},
                 {"kind":"foreign", "key":"category_sid", "reference":"sid", "on": "category"}
             ],
             "relations":[

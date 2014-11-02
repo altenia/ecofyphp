@@ -56,7 +56,7 @@ class PersonAuthController extends BaseController {
      * `/auth/signup` instead of `/login`
      */
     public function getSignup() {
-        $this->layout->content = View::make('auth.signup2');
+        $this->layout->content = \View::make('auth.signup2');
     }
 
     /**
@@ -78,7 +78,7 @@ class PersonAuthController extends BaseController {
     public function getSignout() {
         AuthzFacade::logout();
         AuthzFacade::removeSession();
-        return Redirect::to('auth/signin')
+        return \Redirect::to('auth/signin')
             ->with('message', 'Your have logged out!');
     }
 
@@ -88,9 +88,9 @@ class PersonAuthController extends BaseController {
     public function postSignin()
     {
         // passdata is either email or phone number
-        $email = trim(Input::get('email'));
-        $verifier = trim(Input::get('verifier'));
-        $person_criteria = array('name_nl' => Input::get('name'));
+        $email = trim(\Input::get('email'));
+        $verifier = trim(\Input::get('verifier'));
+        $person_criteria = array('name_nl' => \Input::get('name'));
 
         $persons = $this->getPersonService()->listPersons($person_criteria);
 
@@ -137,7 +137,7 @@ class PersonAuthController extends BaseController {
                     $matchPerson->user_sid = $user->sid;
                     $this->getPersonService()->updatePersonModel($matchPerson);
                 } catch (ValidationException $ve) {
-                    return Redirect::to('personauth/signin')
+                    return \Redirect::to('personauth/signin')
                         ->withErrors($ve->getObject())
                         ->withInput();
                 }
@@ -151,11 +151,11 @@ class PersonAuthController extends BaseController {
 
                 AuthzFacade::login($user);
             }
-            return Redirect::to('persons');
+            return \Redirect::to('persons');
         } else {
             \Log::debug('Signin attempt failed.');
             //Session::flash('message',  );
-            return Redirect::to('personauth/signin')
+            return \Redirect::to('personauth/signin')
                 ->withErrors( 'Your name/data combination was incorrect!')
                 ->withInput();
         }
@@ -192,7 +192,7 @@ class PersonAuthController extends BaseController {
                 } else {
                     return \Redirect::to('auth/signup')
                         ->withErrors('email nor phone numbers matched')
-                        ->withInput(Input::except('password'));
+                        ->withInput(\Input::except('password'));
                 }
             } else {
                 $user = $this->getUserService()->createUser($data);
@@ -203,7 +203,7 @@ class PersonAuthController extends BaseController {
         } catch (ValidationException $ve) {
             return \Redirect::to('auth/signup')
                 ->withErrors($ve->getObject())
-                ->withInput(Input::except('password'));
+                ->withInput(\Input::except('password'));
         } /*catch (Exception $e) {
             return Redirect::to('auth/signup')
                 ->withErrors($e->getMessage())
@@ -216,6 +216,6 @@ class PersonAuthController extends BaseController {
      * Do Logout
      */
     public function getNopermission() {
-        $this->layout->content = View::make('auth.nopermission');
+        $this->layout->content = \View::make('auth.nopermission');
     }
 }

@@ -18,8 +18,7 @@ class CodeRefController extends GenericServiceController {
 
 
 	public function showAuxData(&$record) {
-		
-
+		$auxdata = array();
 		return $auxdata;
 	}
 }

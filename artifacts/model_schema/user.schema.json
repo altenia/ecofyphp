@@ -12,6 +12,7 @@
                 {"name":"uuid", "type":"string", "length":128, "is_nullable": false},
                 {"name":"domain_sid", "type":"long", "is_nullable": true},
                 {"name":"domain_id", "type":"string", "length":64},
+                {"name":"owned_by", "type":"long"},
                 {"name":"created_by", "type":"long"},
                 {"name":"created_dt", "type":"datetime"},
                 {"name":"updated_by", "type":"long"},

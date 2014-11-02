@@ -194,7 +194,7 @@ class BaseDaoMongo extends BaseDao {
         return $model;
     }
 
-    protected function toDbDateTime($time = null)
+    public function toDbDateTime($time = null)
     {
         if (empty($time))
             return null;
@@ -205,7 +205,7 @@ class BaseDaoMongo extends BaseDao {
      * Returns the DB date to ISO date time
      * @param $date Either null or string in iso format
      */
-    protected function toIsoDateTime($time = null)
+    public function toIsoDateTime($time = null)
     {
         if (empty($time))
             return null;

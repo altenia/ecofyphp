@@ -37,7 +37,7 @@ class CodeRef extends Model {
 	 *
 	 * @var array
 	 */
-    protected $fillable = array('uuid','domain_sid','domain_id','created_by','created_dt','updated_by','updated_dt','update_counter','lang','parent_sid','kind','name','code','abbreviation','description','position','params_text');
+    protected $fillable = array('uuid','domain_sid','domain_id','owner_sid','created_by','created_dt','updated_by','updated_dt','update_counter','lang','parent_sid','kind','name','code','abbreviation','description','position','params_text');
 
     /**
      * Validation rules for creation
@@ -54,9 +54,7 @@ class CodeRef extends Model {
      *
      * @var array
      */
-    private static $validation_rules_udpate = array(
-        'kind' => 'required',
-		'name' => 'required'
+    private static $validation_rules_update = array(
     	);
 
     /**

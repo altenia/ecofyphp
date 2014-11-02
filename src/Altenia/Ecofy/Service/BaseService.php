@@ -46,7 +46,7 @@ class BaseService {
 			$this->containerService = $service;
 		} else if (is_string($service)) {
 			// It's a service name, resolve and assign
-			$this->containerService = \App::make($service);
+			$this->containerService = ServiceRegistry::instance()->getServiceObject($service);
 		}
 		if ($registerAsContained === true) {
 			// Also register itself as contained service in the container

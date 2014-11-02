@@ -1,5 +1,6 @@
 <?php namespace Altenia\Ecofy\Module\Tool;
 
+use Altenia\Ecofy\Util\StringUtil;
 use Altenia\Ecofy\Controller\BaseController;
 use Altenia\Ecofy\Util\Mailer;
 
@@ -19,7 +20,7 @@ class MailerController extends BaseController {
 		$this->addBreadcrumb(['import']);
 		$this->setContentTitle('Import' );
 
-		$this->addDatasource('persons', Lang::get('person._name')
+		$this->addDatasource('persons', \Lang::get('person._name')
 			, 'Person', 'Persons', 'Altenia\Ecofy\Module\Person\Person' );
 
     }
@@ -50,6 +51,8 @@ class MailerController extends BaseController {
 	public function getForm() {
 		
 		if (!\Auth::check()) {
+			\Session::flash('message', 'No permission. Sign-in first.') ;
+			return \Redirect::to('auth/nopermission');
 			\App::abort(401);
 		}
 
@@ -65,7 +68,7 @@ class MailerController extends BaseController {
 		$smtpUsername = \Input::get('smtpUsername');
 		$smtpPassword = \Input::get('smtpPassword');
 
-		$this->layout->content = View::make('tool.mailer')
+		$this->layout->content = \View::make('tool.mailer')
 			->with('type', $type)
 			->with('dataQuery', $dataQuery)
 			->with('pageNum', $pageNum)
@@ -100,16 +103,14 @@ class MailerController extends BaseController {
 		$smtpUsername = \Input::get('smtpUsername');
 		$smtpPassword = \Input::get('smtpPassword');
 
-		$config = array(
-    		'server' => $smtpServer,
-			'username' => $smtpUsername,
-			'password' => $smtpPassword,
-			);
+		$config = $this->mailConfigFromUser(\Auth::user());
+
+		//print_r($config); die();
 		$mailer = new Mailer($config);
 
 		$result = $this->handlePost($type, $mode, $dataQuery, $pageNum, $pageSize, $subjectTemplate, $bodyTemplate, $mailer);
 
-		$this->layout->content = View::make('tool.mailer')
+		$this->layout->content = \View::make('tool.mailer')
 			->with('mode', $mode)
 			->with('type', $type)
 			->with('dataQuery', $dataQuery)
@@ -156,7 +157,7 @@ class MailerController extends BaseController {
 			$user = \Auth::user();
 			
 			if ($mode == 'process') {
-				die('not yet');
+				//die('not yet');
 				// process mode
 				$sender = array($user->email => $user->getFullName());
 				$result = $mailer->sendBulkTemplateMail($sender, $recipentsKey, $records, $subjectTemplate, $bodyTemplate);
@@ -183,6 +184,25 @@ class MailerController extends BaseController {
 		//print_r($result);
 		//die();
 		return $result;
+	}
+
+	/**
+	 * Returns the mailer config
+	 */
+	private function mailConfigFromUser($user)
+	{
+		$mailConfig = array();
+		if (StringUtil::endsWith($user->email, 'gmail.com')) {
+			$mailConfig['server'] = 'smtp.gmail.com:465';
+			$atSignPos = strpos($user->email, '@');
+			$mailConfig['username'] = substr($user->email, 0, $atSignPos);
+
+			$attribs = $user->getAttributes();
+			if (!empty($attribs) && array_key_exists('smtp_pwd', $attribs)) {
+				$mailConfig['password'] = $attribs['smtp_pwd'];
+			}
+		}
+		return $mailConfig;
 	}
 
 }

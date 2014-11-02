@@ -37,7 +37,7 @@ class Organization extends Model {
 	 *
 	 * @var array
 	 */
-    protected $fillable = array('uuid','domain_sid','domain_id','created_by','created_dt','updated_by','updated_dt','update_counter','lang','owner_sid','parent_sid','role_sid','role_name','id','name','name_nl','category_sid','registration_type','registration_num','inet_domain_name','url','country_cd','province_cd','district','address','postal_code','slogan','summary','description','logo_image_uri','cover_image_uri','found_date','status','num_members','num_comments','num_cheers','params_text');
+    protected $fillable = array('uuid','domain_sid','domain_id','owner_sid','created_by','created_dt','updated_by','updated_dt','update_counter','lang','owner_sid','parent_sid','role_sid','role_name','id','name','name_nl','category_sid','registration_type','registration_num','inet_domain_name','url','country_cd','province_cd','district','address','postal_code','slogan','summary','description','logo_image_uri','cover_image_uri','found_date','status','num_members','num_comments','num_cheers','params_text');
 
     /**
      * Validation rules for creation
@@ -56,9 +56,9 @@ class Organization extends Model {
      *
      * @var array
      */
-    private static $validation_rules_udpate = array(
-        'id' => 'required|alpha_dash|min:4',
-		'name' => 'required|alpha_dash|min:4',
+    private static $validation_rules_update = array(
+        'id' => 'alpha_dash|min:4',
+		'name' => 'alpha_dash|min:4',
 		'url' => 'url',
 		'country_cd' => 'min:2|max:3'
     	);

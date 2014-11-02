@@ -148,19 +148,31 @@ class AuthzFacade {
 		// 3.1. The resource string is "svc:<container_svc_root>/item:<param[0]>[/svc:<conatiner_service>]"
 		// 4. If no such service exists, just use the service name as-is with /<param-key>:<param-val>. 
 		$resource = '';
+		
+		// Disregar the namesapce part
 		$slashPos = strrpos($controllerName, '\\');
 		if ($slashPos === false) 
 			$slashPos = 0;
 		else 
 			++$slashPos; 
+
+		// Get the length of the xx on Controller@xx
+		$methodNameLen = 0;
+		$atPos = strrpos($controllerName, '@');
+		if ($atPos !== false) {
+			$methodNameLen = strlen($controllerName) - $atPos;
+		}
+
+
 		// Remove namespaces and 'Controller' suffix
-		$serviceName = substr($controllerName, $slashPos,  - 10); 
+		$serviceName = substr($controllerName, $slashPos,  - 10 - $methodNameLen); 
 
 		if (StringUtil::endsWith($serviceName, 'Api')) {
 			// Remove 'Api' Suffix
 			$serviceName = substr($serviceName, 0,  - 3); 
 		}
 		$serviceName = snake_case($serviceName);
+
 
 		$serviceInfo = ServiceRegistry::instance()->findById($serviceName);
 		if ($serviceInfo !== null) {
@@ -173,7 +185,7 @@ class AuthzFacade {
 			$paramsCnt = count($params);
 			for ($i = 0; $i < $servicePathCnt; $i ++) {
 				$itemPart = ( $paramsCnt > $i) ? '/item:' . $params[$i] : '';
-                                if ($i > 0) $resource .= '/';
+                if ($i > 0) $resource .= '/';
 				$resource .= 'svc:' . $servicePath[$i] . $itemPart;
 			}
 		} else {
@@ -191,19 +203,19 @@ class AuthzFacade {
 		// actionName sample: DocumentController@edit
 
 		if (StringUtil::startsWith($actionType, 'index'))
-			return AccessControl::FLAG_LIST;
+			return AccessControl::FLAG_OWN_LIST | AccessControl::FLAG_LIST ;
 		if (StringUtil::startsWith($actionType, 'show'))
-			return AccessControl::FLAG_READ;
+			return AccessControl::FLAG_OWN_READ | AccessControl::FLAG_READ ;
 		if (StringUtil::startsWith($actionType, 'create'))
 			return AccessControl::FLAG_CREATE;
 		if (StringUtil::startsWith($actionType, 'store'))
 			return AccessControl::FLAG_CREATE;
 		if (StringUtil::startsWith($actionType, 'edit'))
-			return AccessControl::FLAG_UPDATE;
+			return AccessControl::FLAG_OWN_UPDATE | AccessControl::FLAG_UPDATE ;
 		if (StringUtil::startsWith($actionType, 'update'))
-			return AccessControl::FLAG_UPDATE;
+			return AccessControl::FLAG_OWN_UPDATE | AccessControl::FLAG_UPDATE ;
 		if (StringUtil::startsWith($actionType, 'destroy'))
-			return AccessControl::FLAG_DELETE;
+			return AccessControl::FLAG_OWN_DELETE | AccessControl::FLAG_DELETE ;
 		return AccessControl::FLAG_READ;
 	}
 

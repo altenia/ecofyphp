@@ -81,6 +81,14 @@ class BaseDaoEloquent extends BaseDao {
     public function insert($record)
     {
         $record->uuid = $this->genUuid();
+
+        if (\Auth::check()) {
+            \Auth::user();
+            $record->created_by = \Auth::user()->sid;
+            // the owner of this record is same as the creator until it is changed.
+            $record->owner_sid = $record->created_by;
+        }
+
         $dbtime_now = $this->toDbDateTime(new \DateTime);
         $record->created_dt = $dbtime_now;
         $record->updated_dt = $dbtime_now;
@@ -185,15 +193,15 @@ class BaseDaoEloquent extends BaseDao {
     /**
      * @param $date Either null or string in iso format
      */
-    protected function toDbDateTime($time = null)
+    public function toDbDateTime($time = null)
     {
         if (empty($time))
             return null;
-        $format = 'Y-m-d H:i:s';
+        $mySqlFormat = 'Y-m-d H:i:s';
         if ( !($time instanceof \DateTime)) {
-            $time = \DateTime::createFromFormat($format, $time);
+            $time = new \DateTime($time);
         }
-        $time_str = $time->format('Y-m-d H:i:s');
+        $time_str = $time->format($mySqlFormat);
 
         return $time_str;
     }
@@ -202,7 +210,7 @@ class BaseDaoEloquent extends BaseDao {
      * Returns the DB date to ISO date time
      * @param $date Either null or string in iso format
      */
-    protected function toIsoDateTime($time = null)
+    public function toIsoDateTime($time = null)
     {
         if (empty($time))
             return null;

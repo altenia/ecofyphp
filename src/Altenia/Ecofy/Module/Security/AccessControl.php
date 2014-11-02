@@ -37,7 +37,7 @@ class AccessControl extends Model {
 	 *
 	 * @var array
 	 */
-    protected $fillable = array('domain_sid','domain_id','creator_sid','created_dt','updated_by','updated_dt','update_counter','uuid','lang','role_sid','service','permissions','policy','params_text');
+    protected $fillable = array('domain_sid','domain_id','owner_sid','creator_sid','created_dt','updated_by','updated_dt','update_counter','uuid','lang','role_sid','service','permissions','policy','params_text');
 
     /**
      * Validation rules for creation
@@ -76,6 +76,7 @@ class AccessControl extends Model {
     public function setPolicyFromJson($policyJson)
     {
         $this->policy = json_decode($policyJson, true);
+        // @todo: traverse and parse non-numeric @permissions
 
         //print_r($this->policy);
     }
@@ -90,36 +91,37 @@ class AccessControl extends Model {
     const ATTR_PERMISSIONS = '@permissions';
 
     const FLAG_NONE = 0;
-    const FLAG_READ = 1;
-    const FLAG_LIST = 2;
-    const FLAG_UPDATE = 4;
-    const FLAG_CREATE = 8;
-    const FLAG_DELETE = 16;
-    const FLAG_ADMIN = 32;
 
-    const FLAG_GREAD = 64;
-    const FLAG_GLIST = 128;
-    const FLAG_GUPDATE = 256;
-    const FLAG_GCREATE = 512;
-    const FLAG_GDELETE = 1024;
-    const FLAG_GADMIN = 2048;
+    const FLAG_OWN_READ = 1; // read my own
+    const FLAG_OWN_LIST = 2; // list my own
+    const FLAG_OWN_UPDATE = 4;
+    const FLAG_OWN_DELETE = 8;
 
-    public static function getPermissionsList($global = false) {
+    const FLAG_READ = 16;
+    const FLAG_LIST = 32;
+    const FLAG_UPDATE = 64;
+    const FLAG_CREATE = 128;
+    const FLAG_DELETE = 256;
+
+    const FLAG_IMPORT = 1024;
+    const FLAG_EXPORT = 2048;
+    const FLAG_ADMIN = 4096;
+
+    public static function getPermissionsList() {
         $opt_permissions = array();
-        $opt_permissions[FLAG_READ]   = 'read';
-        $opt_permissions[FLAG_LIST]   = 'list';
-        $opt_permissions[FLAG_UPDATE] = 'update';
-        $opt_permissions[FLAG_CREATE] = 'create';
-        $opt_permissions[FLAG_DELETE] = 'delete';
-        $opt_permissions[FLAG_ADMIN]  = 'admin';
-        if ($global) {
-            $opt_permissions[FLAG_GREAD]   = 'g read';
-            $opt_permissions[FLAG_GLIST]   = 'g list';
-            $opt_permissions[FLAG_GUPDATE] = 'g update';
-            $opt_permissions[FLAG_GCREATE] = 'g create';
-            $opt_permissions[FLAG_GDELETE] = 'g delete';
-            $opt_permissions[FLAG_GADMIN]  = 'g admin';
-        }
+        $opt_permissions[self::FLAG_OWN_READ]   = 'read-owned';
+        $opt_permissions[self::FLAG_OWN_LIST]   = 'list-owned';
+        $opt_permissions[self::FLAG_OWN_UPDATE] = 'update-owned';
+        $opt_permissions[self::FLAG_OWN_DELETE] = 'delete-owned';
+        $opt_permissions[self::FLAG_READ]   = 'read';
+        $opt_permissions[self::FLAG_LIST]   = 'list';
+        $opt_permissions[self::FLAG_UPDATE] = 'update';
+        $opt_permissions[self::FLAG_CREATE] = 'create';
+        $opt_permissions[self::FLAG_DELETE] = 'delete';
+
+        $opt_permissions[self::FLAG_IMPORT]  = 'import';
+        $opt_permissions[self::FLAG_EXPORT]  = 'export';
+        $opt_permissions[self::FLAG_ADMIN]  = 'admin';
         return $opt_permissions;
     }
 

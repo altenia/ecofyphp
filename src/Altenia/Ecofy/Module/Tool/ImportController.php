@@ -1,6 +1,7 @@
 <?php namespace Altenia\Ecofy\Module\Tool;
 
-use \Altenia\Ecofy\Controller\BaseController;
+use Altenia\Ecofy\Controller\BaseController;
+use Altenia\Ecofy\Util\CsvUtil;
 
 class ImportController extends BaseController {
 
@@ -18,8 +19,8 @@ class ImportController extends BaseController {
 		$this->addBreadcrumb(['import']);
 		$this->setContentTitle('Import' );
 
-		$this->addImportable('persons', Lang::get('person._name')
-			, 'Person', 'Altenia\Ecofy\CoreService\Person', new \Altenia\Ecofy\CoreService\PersonImportStrategy() );
+		$this->addImportable('persons', \Lang::get('person._name')
+			, 'Person', 'Altenia\Ecofy\Module\Person\Person', new \Altenia\Ecofy\Module\Person\PersonImportStrategy() );
 
     }
 
@@ -41,8 +42,8 @@ class ImportController extends BaseController {
 		}
 		
 		$auxdata['opt_onmatch'] = array(
-			'update' => Lang::get('import.update'),
-			'skip' => Lang::get('import.skip')
+			'update' => \Lang::get('import.update'),
+			'skip' => \Lang::get('import.skip')
 			);
 		return $auxdata;
 	}
@@ -55,7 +56,7 @@ class ImportController extends BaseController {
 		$onmatch = \Input::get('onmatch');
 		$keycols = \Input::get('keycols');
 		$data = \Input::get('data');
-		$this->layout->content = View::make('tool.form')
+		$this->layout->content = \View::make('tool.form')
 			->with('type', $type)
 			->with('onmatch', $onmatch)
 			->with('keycols', $keycols)
@@ -81,11 +82,11 @@ class ImportController extends BaseController {
 			}
 		}
 
-		$rows = Altenia\Ecofy\Util\CsvUtil::toAssociativeArray($data);
+		$rows = CsvUtil::toAssociativeArray($data);
 
 		$result = $this->processRecords($type, $mode, $updateOnMatch, $keycolArr, $rows);
 
-		$this->layout->content = View::make('tool.form')
+		$this->layout->content = \View::make('tool.form')
 			->with('mode', $mode)
 			->with('onmatch', $onmatch)
 			->with('keycols', implode(",", $keycolArr))

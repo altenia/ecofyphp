@@ -12,7 +12,7 @@ use Illuminate\View\Factory; // View()
  * Controller class that provides web access to resource
  *
  */
-class GenericServiceController extends \BaseController {
+class GenericServiceController extends BaseController {
 
     // The service object
 	protected $service;
@@ -106,8 +106,9 @@ class GenericServiceController extends \BaseController {
 	{
 		$data = \Input::all();
 
+		$createMethod = 'create' . $this->modelName;
+
 		try {
-			$createMethod = 'create' . $this->modelName;
 			$this->beforeRecordCreate($data);
             $record = $this->service->$createMethod($data);
             $this->afterRecordCreate($record);
@@ -177,9 +178,10 @@ class GenericServiceController extends \BaseController {
 	public function update($id)
 	{
 		$data = \Input::all();
+
+		$updateMethod = 'update' . $this->modelName;
 		
 		try {
-			$updateMethod = 'update' . $this->modelName;
 			$this->beforeRecordUpdate($data);
             $record = $this->service->$updateMethod($id, $data);
             $this->afterRecordUpdate($record);
@@ -274,6 +276,7 @@ class GenericServiceController extends \BaseController {
 	protected function editAuxData(&$record) {
 		return null;
 	}
+
 
 	/**
 	 * Method that is called before creating

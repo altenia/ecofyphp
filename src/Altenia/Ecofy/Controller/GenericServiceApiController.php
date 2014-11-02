@@ -9,7 +9,7 @@ use Altenia\Ecofy\Support\QueryContext;
  * The service must adhere to the method naming convetion.
  *
  */
-class GenericServiceApiController extends \BaseController {
+class GenericServiceApiController extends BaseController {
 
     // The service object
 	protected $service;
@@ -74,7 +74,9 @@ class GenericServiceApiController extends \BaseController {
 		$createMethod = 'create' . $this->modelName;
 
         try {
+        	$this->beforeRecordCreate($data);
             $record = $this->service->$createMethod($data);
+            $this->afterRecordCreate($record);
             return \Response::json(array(
                 'sid' => $record->sid),
                 201
@@ -123,9 +125,12 @@ class GenericServiceApiController extends \BaseController {
 	{
 		$data = \Input::all();
 
+        $updateMethod = 'update' . $this->modelName;
+
         try {
-        	$updateMethod = 'update' . $this->modelName;
+			$this->beforeRecordUpdate($data);
             $record = $this->service->$updateMethod($id, $data);
+            $this->afterRecordUpdate($record);
             return \Response::json(array(
                 'sid' => $record->sid),
                 200
@@ -163,6 +168,39 @@ class GenericServiceApiController extends \BaseController {
 		} else {
 		    \App::abort(404);
 		}
+	}
+
+
+	/**
+	 * Method that is called before creating
+	 * @param array $data  the array fromwhich the record will be created
+	 */
+	protected function beforeRecordCreate(&$data) {
+
+	}
+
+	/**
+	 * Method that is called after record is created
+	 * @param object $record the record that was created
+	 */
+	protected function afterRecordCreate(&$record) {
+
+	}
+
+	/**
+	 * Method that is called before creating
+	 * @param array $data  the array fromwhich the record will be created
+	 */
+	protected function beforeRecordUpdate(&$data) {
+
+	}
+
+	/**
+	 * Method that is called after record is created
+	 * @param object $record the record that was created
+	 */
+	protected function afterRecordUpdate(&$record) {
+
 	}
 }
 

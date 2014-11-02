@@ -37,7 +37,7 @@ class Role extends Model {
 	 *
 	 * @var array
 	 */
-    protected $fillable = array('uuid','domain_sid','domain_id','created_by','created_dt','updated_by','updated_dt','update_counter','lang','subject_type','name','params_text');
+    protected $fillable = array('uuid','domain_sid','domain_id','owner_sid','created_by','created_dt','updated_by','updated_dt','update_counter','lang','subject_type','name','params_text');
 
     /**
      * Validation rules for creation

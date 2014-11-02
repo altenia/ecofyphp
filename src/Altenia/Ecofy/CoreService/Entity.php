@@ -56,9 +56,9 @@ class Entity extends Model {
      *
      * @var array
      */
-    private static $validation_rules_udpate = array(
-        'id' => 'required|alpha_dash|min:4',
-		'name' => 'required|alpha_dash|min:4',
+    private static $validation_rules_update = array(
+        'id' => 'alpha_dash|min:4',
+		'name' => 'alpha_dash|min:4',
 		'url' => 'url',
 		'country_cd' => 'min:2|max:3'
     	);

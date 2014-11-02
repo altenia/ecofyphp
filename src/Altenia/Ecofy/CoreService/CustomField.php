@@ -56,11 +56,7 @@ class CustomField extends Model {
      *
      * @var array
      */
-    private static $validation_rules_udpate = array(
-        'type' => 'required',
-		'field_name' => 'required',
-		'data_type' => 'required',
-		'value' => 'required'
+    private static $validation_rules_update = array(
     	);
 
     /**

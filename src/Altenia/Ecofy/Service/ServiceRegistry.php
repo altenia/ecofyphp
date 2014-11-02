@@ -8,7 +8,7 @@ class ServiceRegistry {
 
     private $services = array();
 
-    private $servicesById = array();
+    public $servicesById = array();
 
     private static $instance = null;
 
@@ -27,10 +27,10 @@ class ServiceRegistry {
      * Creates a new records.
      * Mostly wrapper around insert with pre and post processing.
      *
-     * @param $id, 
-     * @param $title, 
-     * @param $url, 
-     * @param $icon, 
+     * @param $id        ID of the service (without the 'svc:' prefix)
+     * @param $title     
+     * @param $url        
+     * @param $icon      
      * @param $reference either a closure or actual reference to the service.
      * @return mixed  null if successful, validation object validation fails
      */

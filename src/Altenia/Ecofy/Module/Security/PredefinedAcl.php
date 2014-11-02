@@ -4,7 +4,7 @@ class PredefinedAcl
 {
     private static $serviceAcl = array();
 
-    public static function addAcl($role, $policyJson, $permission = 7)
+    public static function addAcl($role, $policyJson, $permission = 15)
     {
         if (self::$serviceAcl == null) {
             self::$serviceAcl = array();
